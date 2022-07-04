@@ -1,0 +1,89 @@
+
+
+<div nz-row>
+    <div nz-col nzSpan="24">
+     
+        <div class="send-request">
+            <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="historial" [nzLoading]="isLoading"
+            [nzTotal]="total"
+            [nzPageSize]="pageSize"
+            [nzPageIndex]="page"
+            (nzQueryParams)="onQueryParamsChange($event)"
+            [nzTitle]="headerTable"
+            [nzFooter]="footerTable"
+            >
+                <thead>
+                    <tr>
+
+                        <th id="fecha" nzColumnKey="fecha" [nzSortFn]="true">Fecha</th>
+                        <th id="ip" nzColumnKey="ip" [nzSortFn]="true">Ip</th>
+                        <th id="sitio" nzColumnKey="sitio" [nzSortFn]="true">Sitio</th>
+                        <th id="username" nzColumnKey="username" [nzSortFn]="true">Usuario</th>
+                        <th id="hora" nzColumnKey="hora" [nzSortFn]="true">Hora</th>
+                        <th id="duracion" nzColumnKey="duracion" [nzSortFn]="true">Duración</th>
+                        <th id="consumo" nzColumnKey="consumo" [nzSortFn]="true">Consumo</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <nz-date-picker [(ngModel)]="fecha" (ngModelChange)="buscar($event)"></nz-date-picker>
+                        </td>
+                        <td>
+                            <input nz-input type="text" [(ngModel)]="ip" (change)="buscar($event)">
+                        </td>
+                        <td>
+                            <input nz-input type="text" [(ngModel)]="sitio" (change)="buscar($event)">
+                        </td>
+                        <td>
+                            <input nz-input type="text" [(ngModel)]="username" (change)="buscar($event)">
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let data of rowSelectionTable.data">
+                        <td>{{ data.fecha }}</td>
+                        <td>{{ data.hora }}</td>
+                        <td>{{ data.ip }}</td>
+                        <td>{{ data.sitio }}</td>
+                        <td>{{ data.duracion }}</td>
+                        <td>{{ data.username}}</td>
+                        <td>{{ data.consumo}}</td>
+                       
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+<ng-template #headerTable>
+    <div class="search-report-title">
+        <h3>Reporte General de Navegación </h3>
+    </div>
+    <div class="search-report">
+            <nz-date-picker [(ngModel)]="filtro.fechainicial" ngClass="search-report-item"  nzPlaceHolder="Fecha Inicio"></nz-date-picker>
+        
+            <nz-date-picker [(ngModel)]="filtro.fechafin" ngClass="search-report-item"  nzPlaceHolder="Fecha Fin"></nz-date-picker>
+        
+            <button nz-button nzType="primary" ngClass="search-report-item" (click)="filtrar()">
+                <i nz-icon nzType="filter"></i><span>Filtrar</span>
+            </button>
+        
+                <button nz-button nzType="primary" ngClass="warning search-report-item">
+                    <i nz-icon nzType="file-pdf" nzTheme="outline"></i><span>Exportar</span>
+                </button>
+    
+    </div>
+</ng-template>
+<ng-template #footerTable>
+    <div class="search-report-title">
+        <h3>Consumo Total:  {{consumoTotal}}</h3>
+    </div>
+    
+</ng-template>

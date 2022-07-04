@@ -1,0 +1,58 @@
+<ul nz-menu nzTheme="light" nzMode="horizontal" class="header-menu" nzAling="right">
+
+
+    <li>
+
+        <nz-avatar nzIcon="question" [nzSize]="29" nzShape="circle" style="background-color:#ff5918; cursor: pointer;"></nz-avatar>
+
+    </li>
+    <li>
+
+        <nz-avatar nzIcon="mail" [nzSize]="29" nzShape="circle" style="background-color:#1890ff; cursor: pointer;" nz-dropdown [nzDropdownMenu]="usuario" nzTrigger="click"></nz-avatar>
+        <nz-dropdown-menu #usuario="nzDropdownMenu">
+            <ul nz-menu>
+                <li nz-menu-item>menu2 1st menu itemqaqweqweqweqweqweqweqweqweqweqweqweqweqeqweqweqwe</li>
+                <li nz-menu-item>menu2 2nd menu item</li>
+                <li nz-menu-item>menu2 3rd menu item</li>
+            </ul>
+        </nz-dropdown-menu>
+    </li>
+    <li>
+        <nz-avatar [nzText]="iniciales" style="background-color:#87d068; cursor: pointer;" nz-dropdown [nzDropdownMenu]="mensajes" nzTrigger="click" (click)="display = !display"></nz-avatar>
+        <nz-dropdown-menu #mensajes="nzDropdownMenu">
+            <div nz-row class="menu-dropdown">
+                <div nz-col nzSpan="24">
+                    <div nz-row class="menu-dropdown-header" nzJustify="space-around" nzAlign="middle">
+                        <div nz-col nzSpan="24">
+                            <h4>Bienvenido {{nombre}}</h4>
+                        </div>
+                    </div>
+
+                    <div nz-row class="menu-dropdown-body">
+                        <div nz-col nzSpan="24">
+                            <ul>
+                                <li><a >Perfil: {{perfil}}</a></li>
+                                <li><a >Email: {{email}}</a></li>
+                                <li><a >Fecha: {{fecha | date: 'd/MM/Y'}}</a></li>
+                                <li><a >Hora: {{fecha | date: 'mediumTime'}}</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div nz-row nzJustify="space-around" nzAlign="middle" class="menu-dropdown-footer">
+                        <div nz-col nzSpan="24">
+                            <button nz-button nzType="primary" nzSuccess (click)="logout()" nzShape="round">
+                                <i nz-icon nzType="poweroff"></i>
+                                Salir del sistema
+                              </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </nz-dropdown-menu>
+
+    </li>
+</ul>

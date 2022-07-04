@@ -1,0 +1,64 @@
+<div nz-row style="margin-top: 10px;">
+    <div nz-col nzSpan="9">
+        <div>
+            <h3>Usuarios a Seleccionar</h3>
+        </div>
+        <nz-table #rowSelectionTable [nzShowPagination]="false" [nzFrontPagination]="false" nzShowSizeChanger [nzData]="listaAuxiliar" [nzScroll]="{ y: '300px'}">
+            <thead>
+                <tr>
+                    <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                    <th>
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input placeholder="Buscar" [(ngModel)]="search" (ngModelChange)="buscar()" />
+                        </nz-input-group>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of rowSelectionTable.data">
+                    <td [nzChecked]="setOfCheckedId.has(data.username)" (nzCheckedChange)="onItemChecked(data.username, $event)">
+                    </td>
+                    <td>{{ data.nombre }}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+    <div nz-col nzSpan="1">
+    </div>
+    <div nz-col nzSpan="14">
+        <div>
+            <h3>Usuarios Seleccionados</h3>
+        </div>
+        <nz-table #tableDestino [nzShowPagination]="false" [nzFrontPagination]="false" nzShowSizeChanger [nzData]="listaResultado" [nzScroll]="{ y: '300px'}">
+            <thead>
+                <tr>
+                    <th>
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input placeholder="Buscar" [(ngModel)]="searchResultado" (ngModelChange)="buscarResultado()" />
+                        </nz-input-group>
+                    </th>
+                    <th>Cuota</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of tableDestino.data">
+                    <td>{{ data.nombre }}</td>
+                    <td> <input type="number" nz-input placeholder="Buscar" [(ngModel)]="data.cuota" (ngModelChange)="data.cuota > 0 ? data.isvalid = true : data.isvalid = false" /></td>
+                    <td>
+                        <nz-switch [(ngModel)]="data.internet" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate"></nz-switch>
+                    </td>
+
+                    <td><button nz-button nzType="primary" nzSize="small" nzColor="danger" nzShape="circle" title="Eliminar" style="background-color: rgb(228, 11, 11);border-color: white;" (click)="deleteSelectedUser(data.username)"><i nz-icon nzType="delete"></i></button>
+                    </td>
+
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
+<ng-template #checkedTemplate>Internet</ng-template>
+<ng-template #unCheckedTemplate>Nacional</ng-template>

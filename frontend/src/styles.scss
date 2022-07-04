@@ -1,0 +1,101 @@
+/* You can add global styles to this file, and also import other style files */
+
+.ant.message {
+    background: transparent !important;
+}
+
+.ant-message-notice-content {
+    background: transparent !important;
+}
+
+.ant-message-error,
+.ant-message-success,
+.ant-message-warning {
+    max-width: 300px;
+    padding: 10px;
+    color: white;
+    i {
+        color: white !important;
+    }
+}
+
+.ant-message-error {
+    background-color: red !important;
+}
+
+.ant-message-success {
+    background-color: rgb(17, 160, 17);
+}
+
+.ant-message-warning {
+    background-color: rgb(241, 127, 20);
+}
+
+.success {
+    background-color: rgb(20, 168, 64) !important;
+    border-color: white !important;
+}
+
+.danger {
+    background-color: rgb(201, 7, 7) !important;
+    border-color: white !important;
+}
+
+.warning {
+    background-color: rgb(223, 172, 5) !important;
+    border-color: white !important;
+}
+
+.header-button {
+    margin-right: 5px;
+}
+
+.steps-content-form {
+    margin-top: 16px;
+    border: 1px dashed #e9e9e9;
+    border-radius: 6px;
+    min-height: 200px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.steps-content {
+    margin-top: 16px;
+    border-radius: 6px;
+    min-height: 200px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.form-content {
+    margin-top: -15px;
+    border-radius: 6px;
+    background-color: #fafafa;
+    min-height: 200px;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.ant-card-body {
+    overflow: auto;
+}
+
+.action-table-buttons {
+    text-align: center !important;
+}
+
+/*Estilizando los taps */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    font-size: 15px !important;
+    color: #8d93a0 !important;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+    font-weight: 900;
+    text-shadow: 0 0 0.25px currentColor;
+}
+.ant-tabs-tab .ant-tabs-tab-btn {
+    font-size: 15px !important;
+    color: #8d93a0 !important;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+    font-weight: 300;
+    text-shadow: 0 0 0.25px currentColor;
+}

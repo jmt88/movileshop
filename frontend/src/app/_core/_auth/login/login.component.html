@@ -1,0 +1,30 @@
+<div nz-row nzJustify="space-around" nzAlign="middle" class="border">
+    <div class="login-form-content">
+        <div class="login-header">
+            <img src="../../../../assets/img/imagen-login.png" alt="login">
+            <h5>Sistema Automatizado de Cuotas<br> y <br>Trazas de Navegación</h5>
+        </div>
+        <div class="login-body">
+            <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()"
+                style="margin-top: 30px;">
+                <nz-form-item>
+                    <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                        <nz-input-group nzPrefixIcon="user">
+                            <input type="text" nz-input formControlName="userName" placeholder="Usuario" />
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                        <nz-input-group nzPrefixIcon="lock">
+                            <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+                    [nzLoading]="isLoading"><i nz-icon nzType="login" nzTheme="outline"></i> Entrar</button>
+            </form>
+        </div>
+    </div>
+</div>

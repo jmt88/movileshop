@@ -1,0 +1,166 @@
+:host {
+    display: flex;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.app-layout {
+    height: 100vh;
+}
+
+.menu-sidebar {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+}
+
+.trigger-header {
+    margin-top: 50px;
+    text-align: center !important;
+    margin-bottom: 0px;
+}
+
+.trigger-header span {
+    background: #1890ff;
+    padding: 2px 4px 2px 4px;
+    border-radius: 50%;
+    i {
+        color: #fff;
+    }
+}
+
+nz-divider {
+    margin-top: 1px !important;
+}
+
+.header-trigger {
+    height: 64px;
+    padding: 3px 4px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all .3s, padding 0s;
+    text-align: center;
+}
+
+.trigger:hover {
+    color: #1890ff;
+}
+
+.sidebar-logo {
+    position: relative;
+    height: 64px;
+    padding-left: 24px;
+    overflow: hidden;
+    line-height: 64px;
+    background: #fff;
+    transition: all .3s;
+}
+
+.sidebar-logo img {
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    vertical-align: middle;
+    margin-left: -10px;
+
+}
+
+.sidebar-logo h1 {
+    display: inline-block;
+    margin: 0 0 0 20px;
+    color: rgb(29, 22, 22);
+    font-weight: 600;
+    font-size: 14px;
+    font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+    vertical-align: middle;
+    background: #fff;
+    mix-blend-mode: multiply;
+    position: relative;
+}
+
+.sidebar-logo h1:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgb(0, 183, 255), rgb(133, 133, 126));
+    mix-blend-mode: screen; //<-- atento a esta linea//
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+nz-header {
+    padding: 0;
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+}
+
+.app-header {
+    position: relative;
+    height: 64px;
+    padding: 0;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+}
+
+nz-content {
+    margin: 3px;
+}
+
+.inner-content {
+    padding: 10px;
+    height: 100%;
+    overflow-y: auto;
+}
+.footer{
+    bottom: 0;
+    position: absolute;
+    text-align: right;
+}
+.menu-sidebar,
+.header-trigger {
+    display: inline-block;
+}
+
+nz-submenu {
+    background: #fff !important;
+}
+
+::ng-deep {
+    .dashboard-item{
+        font-size: 13px !important;
+        color: #8d93a0 !important;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+        font-weight: 900;
+        
+        }
+    .ant-menu-submenu-title {
+        font-size: 13px !important;
+        color: #8d93a0 !important;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+        font-weight: 900;
+    }
+    .ant-menu-submenu-title i {
+        font-size: 17px !important;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+        color: #b9b9b9 !important;
+    }
+    .ant-menu-submenu-title:hover {
+        .ant-menu-submenu-arrow {}
+    }
+    .ant-menu-submenu-title .ant-menu-submenu-arrow:hover {}
+    .ant-menu-sub {
+        background: #fff !important;
+    }
+    .ant-menu-sub li a {
+        color: #8d93a0 !important;
+        font-size: 13px;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+    }
+    .ant-menu-sub li a:hover {
+        color: #313d49 !important;
+    }
+}

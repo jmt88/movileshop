@@ -1,0 +1,18 @@
+<nz-card [nzBordered]="false" nzTitle="Administrar Cuotas del Sistema" [nzExtra]="buttonsTemplate">
+    <div nz-row>
+        <nz-spin [nzSpinning]="isLoading">
+            {{cuotas.length}}
+        <div nz-col nzSpan="24" *ngIf="mostrar">
+            <app-importacion-usuarios [importedUsers]="cuotas" [usuariosEntrada]="listadoUsuario" (onIportedUsers)="onChangeCuotas($event)"></app-importacion-usuarios>
+        </div>
+    </nz-spin>
+    </div>
+</nz-card>
+
+<ng-template #buttonsTemplate>
+    <div class="steps-action" *ngIf="permisos.crear">
+        <button nz-button nzType="primary" ngClass="success header-button" (click)="salvarCuotas()">
+            <i nz-icon nzType="save"></i><span>Guardar</span>
+        </button>
+    </div>
+</ng-template>

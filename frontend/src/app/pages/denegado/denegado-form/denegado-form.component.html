@@ -1,0 +1,35 @@
+<nz-spin [nzSpinning]="lodading">
+    <nz-card [nzBordered]="false" [nzTitle]="title" [nzExtra]="buttonsTemplate">
+
+        <div nz-row>
+            <div nz-col nzSpan="24">
+            <form nz-form [formGroup]="formGroup" nzLayout="vertical">
+                <nz-form-item>
+                    <nz-form-label nzRequired nzFor="sitio">
+                        Sitio
+                    </nz-form-label>
+                    <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                        <input type="text" nz-input formControlName="sitio" />
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </div>
+        </div>
+    </nz-card>
+</nz-spin>
+<ng-template #buttonsTemplate>
+    <div class="steps-action">
+        <button nz-button nzType="primary" (click)="salvarDatos()"
+            style="background-color: rgb(20, 168, 64); border-color: white;">
+            <i nz-icon nzType="save"></i><span>Guardar</span>
+        </button>
+        <button nz-button nzType="default" (click)="cerrarModal(false)">
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Cancelar
+
+        </button>
+
+    </div>
+</ng-template>
+<ng-template #checkedTemplate>Internet</ng-template>
+<ng-template #unCheckedTemplate>Nacional</ng-template>

@@ -1,0 +1,63 @@
+<nz-card [nzBordered]="false" nzTitle="Administrar Networks del Sistema" [nzExtra]="buttonsTemplate" *ngIf="!this.local">
+    <div nz-row>
+        <div nz-col nzSpan="24">
+            <div class="send-request">
+                <nz-table #rowSelectionTableNetworks nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="hosts" [nzLoading]="isLoading">
+                    <thead>
+                        <tr>
+                            <th id="ip">Host Ip</th>
+                            <th id="internet-network">Alcance</th>
+                            <th id="acciones-network" class="action-table-buttons" nzWidth="150px"> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of rowSelectionTableNetworks.data">
+                            <td>{{ data.host }}</td>
+                            <td>{{ data.internet ? 'Internet': 'Nacional' }}</td>
+                            <td class="action-table-buttons">
+                                <button nz-button title="Editar" nzSize="small" (click)="editar(data)" *ngIf="permisos.modificar || local" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="edit"></i></button>
+                                <button nz-button nzSize="small" title="Eliminar" (click)="deleteList(data.id)" *ngIf="permisos.eliminar || local" nzType="primary" class="danger" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</nz-card>
+<div nz-row *ngIf="local">
+
+    <div nz-col nzSpan="24">
+        <button nz-button nzType="primary" ngClass="success header-button" (click)="adicionar()" style="margin-bottom: 15px;">
+            <i nz-icon nzType="plus"></i><span>Adicionar Host</span>
+        </button>
+        <div class="send-request">
+            <nz-table #rowSelectionTable nzShowPagination nzShowSizeChanger [nzData]="hosts" [nzLoading]="isLoading">
+                <thead>
+                    <tr>
+                        <th id="nombre">Host</th>
+                        <th id="usuario">Alcance</th>
+                        <th id="acciones"> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of rowSelectionTable.data">
+                        <td>{{ data.host }}</td>
+                        <td>{{ data.internet ? 'Internet': 'Nacional' }}</td>
+                        <td>
+                            <button nz-button title="Editar" nzSize="small" (click)="editar(data)" *ngIf="permisos.modificar || local" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="edit"></i></button>
+                            <button nz-button nzSize="small" title="Eliminar" (click)="deleteList(data.posicion)" *ngIf="permisos.eliminar || local" nzType="primary" class="danger" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+<ng-template #buttonsTemplate>
+    <div class="steps-action" *ngIf="permisos.crear">
+        <button nz-button nzType="primary" ngClass="success header-button" (click)="adicionar()">
+        <i nz-icon nzType="plus"></i><span>Adicionar</span>
+    </button>
+    </div>
+</ng-template>

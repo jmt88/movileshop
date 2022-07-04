@@ -1,0 +1,38 @@
+<nz-table #rowSelectionTable [nzShowPagination]="false" [nzFrontPagination]="false" nzShowSizeChanger
+    [nzData]="permisos" [nzScroll]="{ y: '300px', x: '1200px'}">
+    <thead>
+        <tr>
+            <th nzLeft>
+                Función
+            </th>
+            <th>
+                Ver
+            </th>
+
+            <th>
+                Crear
+            </th>
+            <th>
+                Modificar
+            </th>
+            <th>
+                Eliminar
+            </th>
+            <th>
+                Todos
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of rowSelectionTable.data">
+            <td nzLeft>{{ data.nombre }}</td>
+            <td [(nzChecked)]="data.ver" (nzCheckedChange)="onCheck()"></td>
+            <td [(nzChecked)]="data.crear" (nzCheckedChange)="onCheck()"></td>
+            <td [(nzChecked)]="data.modificar" (nzCheckedChange)="onCheck()"></td>
+            <td [(nzChecked)]="data.eliminar" (nzCheckedChange)="onCheck()"></td>
+            <td [(nzChecked)]="data.eliminar && data.ver && data.modificar && data.crear"
+                (nzCheckedChange)="onCheckAll(data.posicion, $event)"></td>
+        </tr>
+    </tbody>
+</nz-table>

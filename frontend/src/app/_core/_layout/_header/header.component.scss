@@ -1,0 +1,45 @@
+.header-menu {
+    position: absolute;
+    background: #fff;
+    right: 0;
+    li {
+        display: inline-block;
+        margin-right: 35px;
+    }
+}
+
+.menu-dropdown {
+    min-width: 300px;
+    background: #fff;
+    margin-top: 15px;
+}
+
+.menu-dropdown-header {
+    height: 60px !important;
+    background-color: #1890ff;
+    text-align: center;
+}
+
+.menu-dropdown-header h4 {
+    color: white;
+}
+
+.menu-dropdown-footer {
+    height: 60px !important;
+    text-align: center;
+}
+
+nz-menu {
+    background: transparent !important;
+}
+
+.menu-dropdown-body ul li {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.menu-dropdown-body ul li a {
+    color: #8d93a0;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+    font-weight: 600;
+}

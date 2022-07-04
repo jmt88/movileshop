@@ -1,0 +1,26 @@
+.steps-action {
+    margin-top: 24px;
+}
+
+button {
+    margin-right: 8px;
+}
+
+.configuration-form {
+    margin: 30px;
+}
+
+.info-resumen li {
+    list-style: none;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #999393;
+    h4,
+    span {
+        display: inline-flex;
+    }
+    h4 {
+        color: #999393;
+        font-weight: 900;
+        margin-right: 4px;
+    }
+}

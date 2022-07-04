@@ -1,0 +1,59 @@
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar" nzTheme="light"  nzWidth="280px" nzBreakpoint="xxl" [(nzCollapsed)]="visible" [nzTrigger]="null" [nzCollapsible]="false">
+        <div class="sidebar-logo">
+            <a  target="_blank">
+                <img src="./../../../../assets/img/logo.png" alt="logo">
+            </a>
+            <h1>Automatización de Cuotas</h1>
+        </div>
+
+        <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="visible">
+            <li nz-menu-item nzMatchRouter nzIcon="dashboard">
+                        <a routerLink="/dashboard" title="Dashboard" class="dashboard-item"><i nz-icon nzType="dashboard"></i><span >Dashboard</span></a>
+            </li>
+            <li nz-submenu nzOpen nzTitle="Configuración del Sistema" nzIcon="setting" *ngIf="nivel1.length > 0">
+                <ul>
+                    <li nz-menu-item nzMatchRouter *ngFor="let item of nivel1">
+                        <a [routerLink]="item.link">{{item.nombre}}</a>
+                    </li>
+                    <li nz-menu-item nzMatchRouter >
+                        <a (click)="configurar()">Configuración inicial</a>
+                    </li>
+                </ul>
+            </li>
+            <li nz-submenu nzOpen nzTitle="Ajustes de Navegación" nzIcon="form" *ngIf="nivel2.length > 0">
+                <ul>
+                    <li nz-menu-item nzMatchRouter *ngFor="let item of nivel2">
+                        <a [routerLink]="item.link">{{item.nombre}}</a>
+                    </li>
+                </ul>
+            </li>
+            <li nz-submenu nzOpen nzTitle="Control de Navegación" nzIcon="safety-certificate" *ngIf="nivel3.length > 0">
+                <ul>
+                    <li nz-menu-item nzMatchRouter *ngFor="let item of nivel3">
+                        <a [routerLink]="item.link">{{item.nombre}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="trigger-header bottom-0" *ngIf="nivel1.length > 0 || nivel2.length > 0 || nivel3.length > 0">
+            <span nzShape="circle" (click)="visible = !visible" [title]="visible ? 'Expandir':'Contraer'"><i nz-icon [nzType]="visible ? 'double-right':'double-left'" nzTheme="outline"></i></span>
+        </div>
+
+    </nz-sider>
+    <nz-layout>
+        <nz-header>
+            <app-header></app-header>
+        </nz-header>
+        <nz-content>
+            <div class="inner-content" id="content">
+                <router-outlet></router-outlet>
+                <div class="footer">
+                    Prueba de footer
+                </div>
+            </div>
+
+        </nz-content>
+      
+    </nz-layout>
+</nz-layout>

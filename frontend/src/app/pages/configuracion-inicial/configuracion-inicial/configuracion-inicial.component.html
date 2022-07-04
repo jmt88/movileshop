@@ -1,0 +1,175 @@
+<nz-spin [nzSpinning]="isLoading">
+    <nz-card [nzBordered]="false" nzTitle="Configuración inicial" [nzExtra]="buttonsTemplate">
+        <nz-steps [nzCurrent]="current">
+            <nz-step nzTitle="Autenticación" nzSubtitle="Metódo de autenticación del sistema" nzIcon="team"></nz-step>
+            <nz-step nzTitle="Importación de usuarios" nzSubtitle="Solo si está activa la autenticación por Ldap" nzIcon="solution"></nz-step>
+            <nz-step nzTitle="Networks" nzSubtitle="Introducir los host que pueden navegar" nzIcon="solution"></nz-step>
+            <nz-step nzTitle="Terminado" nzIcon="check-circle"></nz-step>
+        </nz-steps>
+
+        <div class="steps-content-form" *ngIf="current==0">
+            <div nz-row>
+                <div nz-col nzSpan="24">
+                    <div nz-row class="configuration-form">
+                        <div nz-col nzSpan="24" nzJustify="left">
+                            <nz-divider nzText="Seleccione el tipo de autenticación" nzOrientation="left"></nz-divider>
+                            <nz-radio-group [(ngModel)]="metodo">
+                                <label nz-radio nzValue="local"> Local</label>
+                                <label nz-radio nzValue="ldap">Ldap (Active Directory, OpenLdap)</label>
+
+                            </nz-radio-group>
+                        </div>
+                    </div>
+
+                    <div nz-row class="configuration-form" *ngIf="metodo == 'ldap'">
+                        <div nz-col nzSpan="24">
+
+                            <form nz-form [formGroup]="validateForm" nzLayout="vertical">
+                                <div nz-row>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="userName">Dn del usuario con permisos de administración</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <input type="text" nz-input formControlName="userName" placeholder="CN=Usuario, OU=Users, DC=midominio, DC=cu" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="baseDn">Dn Base de búsqueda</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <input type="text" nz-input formControlName="baseDn" placeholder="OU=Users, DC=midominio, DC=cu" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="password">Contraseña del usuario</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <input type="password" nz-input formControlName="password" placeholder="Contraseña" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <button nz-button nzType="primary" style="background-color: rgb(3, 136, 36);" (click)="probarConeccion()">Probar conexión</button>
+                                    </div>
+                                    <div nz-col nzSpan="10" nzOffset="2">
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="source">Tipo de servicio</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <nz-select formControlName="source">
+                                                    <nz-option nzValue="ldap" nzLabel="Active Directory"></nz-option>
+                                                    <nz-option nzValue="openLdap" nzLabel="OpenLdap"></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="host">Host del servidor</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <input type="text" nz-input formControlName="host" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="port">Puerto</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <input type="number" nz-input formControlName="port" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label nzRequired nzFor="timeout">Timepo de Espera</nz-form-label>
+                                            <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                                <input type="number" nz-input formControlName="timeout" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="current==1" class="steps-content">
+            <app-importacion-usuarios [usuariosEntrada]="usuariosLdap" (onIportedUsers)="onInportedUsers($event)" [importedUsers]="usuariosSeleccionados"></app-importacion-usuarios>
+        </div>
+
+        <div *ngIf="current==2" class="steps-content">
+            <app-networks [hostList]="networksSeleccionados" (onListChange)="onInportedNetworks($event)"></app-networks>
+        </div>
+
+        <div class="steps-content" *ngIf="current==3">
+            <div nz-row *ngIf="metodo != 'local'">
+                <div nz-col nzSpan="10">
+                    <nz-divider nzText="Datos de conexión" nzOrientation="left"></nz-divider>
+                    <ul class="info-resumen">
+                        <li>
+                            <h4>Tipo de Servicio:</h4><span>{{validateForm.controls['source'].value == 'ldap' ? 'Active Directory' : 'OpenLdap'}}</span>
+                        </li>
+                        <li>
+                            <h4>Host del Servicor:</h4><span>{{validateForm.controls['host'].value}}</span>
+                        </li>
+                        <li>
+                            <h4>Puerto:</h4><span>{{validateForm.controls['port'].value}}</span>
+                        </li>
+                        <li>
+                            <h4>Tiempo de Espera:</h4><span>{{validateForm.controls['timeout'].value}} seg</span>
+                        </li>
+                        <li>
+                            <h4>Dn del Usuario:</h4><span>{{validateForm.controls['userName'].value}}</span>
+                        </li>
+                        <li>
+                            <h4>Dn Base de Búsqueda:</h4><span>{{validateForm.controls['baseDn'].value}}</span>
+                        </li>
+
+                    </ul>
+                </div>
+                <div nz-col nzSpan="12" nzOffset="2">
+                    <nz-divider nzText="Usuarios importados" nzOrientation="left"></nz-divider>
+                    <nz-table #tableDestino [nzShowPagination]="false" [nzFrontPagination]="false" nzShowSizeChanger [nzData]="usuariosSeleccionados" [nzScroll]="{ y: '300px'}">
+                        <thead>
+                            <tr>
+                                <th id="usuario">
+                                    Usuario
+                                </th>
+                                <th id="cuota">Cuota</th>
+                                <th id="tipo-navegacion">Tipo de Navegación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of tableDestino.data">
+                                <td>{{ data.nombre }}</td>
+                                <td>
+                                    {{data.cuota }} Mb
+                                </td>
+                                <td>
+                                    {{data.internet ? 'Internet' : 'Nacional'}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+            <div nz-row *ngIf="metodo == 'local'" nzJustify="center" nzAlign="middle" style="height: 200px !important;">
+                <div nz-col nzSpan="24" nzJustify="center" style="text-align: center;">
+                    <h1>Configuración terminada </h1>
+                </div>
+            </div>
+        </div>
+
+    </nz-card>
+</nz-spin>
+<ng-template #buttonsTemplate>
+    <div class="steps-action">
+        <button nz-button nzType="default" (click)="cancelarOperacion()">
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Cancelar
+            
+          </button>
+        <button nz-button nzType="primary" (click)="pre()" *ngIf="current > 0">
+            <i nz-icon nzType="arrow-left"></i>
+            Anterior
+       
+      </button>
+        <button nz-button nzType="primary" (click)="next()" *ngIf="current < 3" style="background-color: rgb(241, 168, 9); border-color: white;">
+        Siguiente
+        <i nz-icon nzType="arrow-right"></i>
+      </button>
+        <button nz-button nzType="primary" (click)="salvarConfiguracion()" *ngIf="current === 3" style="background-color: rgb(20, 168, 64); border-color: white;">
+            <i nz-icon nzType="save"></i><span>Guardar</span>
+    </button>
+    </div>
+</ng-template>
