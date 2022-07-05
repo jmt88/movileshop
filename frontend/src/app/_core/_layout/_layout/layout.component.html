@@ -16,8 +16,12 @@
                     <li nz-menu-item nzMatchRouter *ngFor="let item of nivel1">
                         <a [routerLink]="item.link">{{item.nombre}}</a>
                     </li>
-                    <li nz-menu-item nzMatchRouter>
-                        <a (click)="configurar()">Configuración inicial</a>
+                </ul>
+            </li>
+            <li nz-submenu nzOpen nzTitle="Datos tieda" nzIcon="setting" *ngIf="nivel2.length > 0">
+                <ul>
+                    <li nz-menu-item nzMatchRouter *ngFor="let item of nivel2">
+                        <a [routerLink]="item.link">{{item.nombre}}</a>
                     </li>
                 </ul>
             </li>

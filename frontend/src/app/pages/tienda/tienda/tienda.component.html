@@ -2,7 +2,7 @@
     <div nz-row>
         <div nz-col nzSpan="24">
             <div class="send-request">
-                <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="usuarios" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
+                <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="tiendas" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
                     <thead>
                         <tr>
                             <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Nombre</th>
@@ -15,16 +15,6 @@
                             <td>
                                 <input nz-input type="text" [(ngModel)]="nombre" (change)="buscar($event)">
                             </td>
-                            <td>
-                                <input nz-input type="text" [(ngModel)]="username" (change)="buscar($event)">
-                            </td>
-                            <td>
-                                <input nz-input type="text" [(ngModel)]="email" (change)="buscar($event)">
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         <tr *ngFor="let data of rowSelectionTable.data">
                             <td>{{ data.nombre }}</td>

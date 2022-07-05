@@ -54,27 +54,13 @@ Route::post('/cargarDatosPerfil', [PerfilController::class, 'cargarDatosPerfil']
 Route::post('/editarPerfil', [PerfilController::class, 'editarPerfil'])->middleware('auth:api');
 Route::post('/eliminarPerfil', [PerfilController::class, 'eliminarPerfil'])->middleware('auth:api');
 
-//NetworksRoutes
-Route::post('/listarNetworks', [NetworkController::class, 'listarNetwork'])->middleware('auth:api');
-Route::post('/salvarNetwork', [NetworkController::class, 'salvarNetwork'])->middleware('auth:api');
-Route::post('/cargarDatosNetwork', [NetworkController::class, 'cargarDatosNetwork'])->middleware('auth:api');
-Route::post('/editarNetwork', [NetworkController::class, 'editarNetwork'])->middleware('auth:api');
-Route::post('/eliminarNetwork', [NetworkController::class, 'eliminarNetwork'])->middleware('auth:api');
-
-//DenegadosRoutes
-Route::post('/listarDenegados', [DenegadosController::class, 'listarDenegado'])->middleware('auth:api');
-Route::post('/salvarDenegado', [DenegadosController::class, 'salvarDenegado'])->middleware('auth:api');
-Route::post('/cargarDatosDenegado', [DenegadosController::class, 'cargarDatosDenegado'])->middleware('auth:api');
-Route::post('/editarDenegado', [DenegadosController::class, 'editarDenegado'])->middleware('auth:api');
-Route::post('/eliminarDenegado', [DenegadosController::class, 'eliminarDenegado'])->middleware('auth:api');
-
-//CuotasRoutes
-Route::post('/listarCuotas', [CuotasController::class, 'listarCuotas'])->middleware('auth:api');
-Route::post('/salvarCuotas', [CuotasController::class, 'salvarCuotas'])->middleware('auth:api');
-
 //DashboarRoutes
 Route::post('/listarResumenConsumo', [DashboarController::class, 'listarResumenConsumo'])->middleware('auth:api');
 
-//ReportesRoutes
-Route::post('/reporteGeneral', [ReportesController::class, 'reporteGeneral'])->middleware('auth:api');
+//TiendasRoutes
+Route::post('/listarTiendas', [TiendaController::class, 'listarTiendas'])->middleware('auth:api');
+Route::post('/salvarTienda', [TiendaController::class, 'salvarTienda'])->middleware('auth:api');
+Route::post('/cargarDatosTienda', [TiendaController::class, 'cargarDatosTienda'])->middleware('auth:api');
+Route::post('/editarTienda', [TiendaController::class, 'editarTienda'])->middleware('auth:api');
+Route::post('/eliminarTienda', [TiendaController::class, 'eliminarTienda'])->middleware('auth:api');
 

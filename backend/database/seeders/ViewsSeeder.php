@@ -29,6 +29,12 @@ class ViewsSeeder extends Seeder
             'descripcion' => 'Administrar perfiles',
             'link' => '/perfiles'
         ]);
+        Views::create([
+            'nombre' => 'Tiendas',
+            'grupo' => 2,
+            'descripcion' => 'Administrar tiendas del sistema',
+            'link' => '/tiendas'
+        ]);
 
     }
 }
