@@ -100,7 +100,6 @@ export class AuthService {
     return result;
   }
   
-
   getSessionToken() {
     let s = sessionStorage.getItem('session');
     let result = '';
@@ -111,7 +110,6 @@ export class AuthService {
     }
     return result;
   }
-
   
   isLogin(): boolean {
     if (sessionStorage.getItem('session')) {

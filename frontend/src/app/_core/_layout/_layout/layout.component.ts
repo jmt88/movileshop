@@ -19,8 +19,6 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   nivel3: any[] = [];
   nivel4: any[] = [];
 
-
-
   ngOnInit(): void {
     
   }
@@ -36,21 +34,21 @@ export class LayoutComponent implements OnInit, AfterViewInit {
 
   asignarPermisos(datos: any[]) {
     datos.forEach(element => {
-       if(element.grupo == 1 && element.ver) {
-          this.nivel1.push(element);
-       }
-       if(element.grupo == 2 && element.ver) {
-          this.nivel2.push(element);
-       }
-       if(element.grupo == 3 && element.ver) {
-          this.nivel3.push(element);
-       }
-       if(element.grupo == 4 && element.ver) {
-          this.nivel4.push(element);
-       }
+      if(element.grupo == 1 && element.ver) {
+        this.nivel1.push(element);
+      }
+      if(element.grupo == 2 && element.ver) {
+        this.nivel2.push(element);
+      }
+      if(element.grupo == 3 && element.ver) {
+        this.nivel3.push(element);
+      }
+      if(element.grupo == 4 && element.ver) {
+        this.nivel4.push(element);
+      }
     });
   }
-   
+
   configurar() {
     this.modal.create({
       nzContent: ConfiguracionInicialComponent,

@@ -1,0 +1,44 @@
+<nz-spin [nzSpinning]="lodading">
+    <nz-card [nzBordered]="false" [nzTitle]="title" [nzExtra]="buttonsTemplate">
+
+        <div nz-row class="form-content">
+            <div nz-col nzSpan="9" class="form-content-data" nzOffset="1">
+                <div nz-row class="configuration-form">
+                    <div nz-col nzSpan="24" nzJustify="left">
+                        <nz-divider nzText="Datos del usuarios" nzOrientation="left"></nz-divider>
+                    </div>
+                </div>
+
+                <div nz-row class="configuration-form">
+                    <div nz-col nzSpan="24">
+                        <form nz-form [formGroup]="formGroup" nzLayout="vertical">
+                            <div nz-row>
+                                <div nz-col nzSpan="24">
+                                    <nz-form-item>
+                                        <nz-form-label nzRequired nzFor="username">Nombre</nz-form-label>
+                                        <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                                            <input type="text" nz-input formControlName="nombre" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-card>
+</nz-spin>
+<ng-template #buttonsTemplate>
+    <div class="steps-action">
+        <button nz-button nzType="primary" (click)="salvarDatos()" style="background-color: rgb(20, 168, 64); border-color: white;">
+        <i nz-icon nzType="save"></i><span>Guardar</span>
+    </button>
+        <button nz-button nzType="default" (click)="cerrarModal(false)">
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Cancelar
+
+        </button>
+
+    </div>
+</ng-template>

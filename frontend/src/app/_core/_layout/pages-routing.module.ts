@@ -50,6 +50,12 @@ export const routes: Routes = [
         canActivate: [LoginGuard],
         loadChildren: () =>
           import('./../../pages/denegado/denegado.module').then((m) => m.DenegadoModule)
+      },
+      {
+        path: 'tiendas',
+        canActivate: [LoginGuard],
+        loadChildren: () =>
+          import('./../../pages/denegado/denegado.module').then((m) => m.DenegadoModule)
       }
     ]
   }
