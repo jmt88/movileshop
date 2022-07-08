@@ -1,7 +1,23 @@
 <nz-card [nzBordered]="false" nzTitle="Administrar Tiendas del Sistema" [nzExtra]="buttonsTemplate">
     <div nz-row>
         <div nz-col nzSpan="24">
-            <div class="send-request">
+            <div nz-col nzSpan="12" style="padding: 10px; position: absolute;
+                top: 0;
+                right: 10px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input nz-input type="text" [(ngModel)]="nombre" (change)="buscar($event)" placeholder="Buscar">
+                    </div>
+                    <div class="col-md-4">
+                        <button nz-button nzType="primary" (click)="buscar($event)">
+                            <i nz-icon nzType="search"></i>
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="send-request" style="margin-top: 55px">
                 <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="tiendas" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
                     <thead>
                         <tr>
@@ -11,14 +27,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <input nz-input type="text" [(ngModel)]="nombre" (change)="buscar($event)">
-                            </td>
-                        </tr>
                         <tr *ngFor="let data of rowSelectionTable.data">
                             <td>{{ data.nombre }}</td>
-                            <td>{{ data.active ? 'Si' : 'No' }}</td>
+                            <td>{{ data.estado ? 'Si' : 'No' }}</td>
                             <td class="action-table-buttons">
                                 <button nz-button title="Editar" nzSize="small" (click)="editar(data.id)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="edit"></i></button>
                                 <button nz-button nzSize="small" title="Eliminar" (click)="mostrarModalEliminar(data.id)" *ngIf="permisos.eliminar" nzType="primary" class="danger" nzShape="round"><i nz-icon nzType="delete"></i></button>

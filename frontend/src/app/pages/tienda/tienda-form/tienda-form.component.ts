@@ -75,15 +75,10 @@ export class TiendaFormComponent implements OnInit{
   }
 
   crearFormulario() {
-    if(!this.local) {
-    this.formGroup = this.fb.group({
-      nombre: [{value: "", disabled: true}, [Validators.required]],
-    });
-  }else {
     this.formGroup = this.fb.group({
       nombre: ["", [Validators.required]],
+      estado: ["", [Validators.required]],
     });
-  }
   }
 
   llenarDatosFormulario(data: any) {
@@ -91,14 +86,13 @@ export class TiendaFormComponent implements OnInit{
     this.crearFormulario();
 
     this.formGroup.controls['nombre'].setValue(data.nombre);
+    this.formGroup.controls['estado'].setValue(data.estado);
     
-    this.permisos = data.permisos;
     this.cdr.detectChanges();
   }
   
   cerrarModal(status: boolean) {
     this.id = null;
-    this.permisos = [];
     this.modalRef.destroy({ data: status });
   }
 
@@ -113,10 +107,8 @@ export class TiendaFormComponent implements OnInit{
 
   salvarDatos() {
     if (this.id) {
-      this.formGroup.controls['password'].removeValidators(Validators.required);
       this.editar(this.id)
     } else {
-      this.formGroup.controls['password'].addValidators([Validators.required]);
       this.salvar()
     }
   }
@@ -128,6 +120,7 @@ export class TiendaFormComponent implements OnInit{
       this.tiendaService.modificarTienda({
         id: this.id,
         nombre: this.formGroup.controls['nombre'].value,
+        estado: this.formGroup.controls['estado'].value,
       }).subscribe(data => {
         this.lodading = false;
           if(data.success) {
@@ -147,6 +140,7 @@ export class TiendaFormComponent implements OnInit{
       this.tiendaService.adicionarTienda({
         id: this.id,
         nombre: this.formGroup.controls['nombre'].value,
+        estado: this.formGroup.controls['estado'].value,
       }).subscribe(data => {
         this.lodading = false;
           if(data.success) {

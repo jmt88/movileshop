@@ -13,10 +13,10 @@ class TiendaController extends Controller
         $this->tiendaService = $tiendaService;
     }
 
-    public function listarTiendas()
+    public function listarTiendas(Request $request)
     {
         try {
-            return response()->json($this->tiendaService->ListarTiendas(), 200);
+            return response()->json($this->tiendaService->ListarTiendas($request), 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
         }

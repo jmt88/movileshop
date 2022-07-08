@@ -88,7 +88,7 @@ export class TiendaComponent implements OnInit {
         nzClosable: false,
         nzCentered: true,
         nzFooter: null,
-        nzWidth: '100%',
+        nzWidth: '50%',
         nzComponentParams: {
           id: id,
           permisosEntrada: this.rutas

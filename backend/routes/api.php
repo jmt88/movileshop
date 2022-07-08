@@ -3,15 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\LdapController;
-use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\PerfilController;
-use App\Http\Controllers\NetworkController;
-use App\Http\Controllers\CuotasController;
+use App\Http\Controllers\TiendaController;
 use App\Http\Controllers\DashboarController;
-use App\Http\Controllers\DenegadosController;
-use App\Http\Controllers\ReportesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,14 +25,6 @@ use App\Http\Controllers\ReportesController;
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::post('/test', [LoginController::class, 'test'])->middleware('auth:api');
-
-//Ldap Routes
-Route::post('/listarUnidadesOrganizativas', [LdapController::class, 'listarUnidadesOrganizativas'])->middleware('auth:api');
-
-//Configuracion Routes
-Route::post('/probarCadenaConeccion', [ConfiguracionController::class, 'probarCadenaConeccion'])->middleware('auth:api');
-Route::post('/establecerComoRealizada', [ConfiguracionController::class, 'establecerComoRealizada'])->middleware('auth:api');
-Route::post('/salvarConfiguracion', [ConfiguracionController::class, 'salvarConfiguracion'])->middleware('auth:api');
 
 //UsuariosRoutes
 Route::post('/listarUsuarios', [UsuarioController::class, 'listarUsuarios'])->middleware('auth:api');

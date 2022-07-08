@@ -6,6 +6,7 @@ import { appConfig } from 'src/app/appConfig';
 interface Tienda {
   id?: any,
   nombre: any,
+  estado: boolean,
 }
 @Injectable({
   providedIn: 'root'
@@ -31,16 +32,18 @@ export class TiendaService {
     });
   }
 
-  adicionarTienda(usuario: Tienda) {
+  adicionarTienda(tienda: Tienda) {
     return this.http.post<any>(`${this.apiUrl}/salvarTienda`, {
-      nombre: usuario.nombre,
+      nombre: tienda.nombre,
+      estado: tienda.estado,
     });
   }
 
-  modificarTienda(usuario: Tienda) {
+  modificarTienda(tienda: Tienda) {
     return this.http.post<any>(`${this.apiUrl}/editarTienda`, {
-      id: usuario.id,
-      nombre: usuario.nombre,
+      id: tienda.id,
+      nombre: tienda.nombre,
+      estado: tienda.estado,
     });
   }
   
