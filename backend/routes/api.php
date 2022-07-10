@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TiendaController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboarController;
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,11 @@ Route::post('/salvarTienda', [TiendaController::class, 'salvarTienda'])->middlew
 Route::post('/cargarDatosTienda', [TiendaController::class, 'cargarDatosTienda'])->middleware('auth:api');
 Route::post('/editarTienda', [TiendaController::class, 'editarTienda'])->middleware('auth:api');
 Route::post('/eliminarTienda', [TiendaController::class, 'eliminarTienda'])->middleware('auth:api');
+
+//CategoriasRoutes
+Route::post('/listarCategorias', [CategoriaController::class, 'listarCategorias'])->middleware('auth:api');
+Route::post('/salvarCategoria', [CategoriaController::class, 'salvarCategoria'])->middleware('auth:api');
+Route::post('/cargarDatosCategoria', [CategoriaController::class, 'cargarDatosCategoria'])->middleware('auth:api');
+Route::post('/editarCategoria', [CategoriaController::class, 'editarCategoria'])->middleware('auth:api');
+Route::post('/eliminarCategoria', [CategoriaController::class, 'eliminarCategoria'])->middleware('auth:api');
 

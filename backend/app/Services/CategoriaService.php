@@ -3,13 +3,13 @@
 
 namespace App\Services;
 
-use App\Models\Tienda;
+use App\Models\Categoria;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
-class TiendaService extends BaseService
+class CategoriaService extends BaseService
 {
-    public function ListarTiendas($request)
+    public function ListarCategorias($request)
     {
         $searchKey = $request->get('searchKey');
         $searchKey = $searchKey != null ?  json_decode($searchKey) : [];
@@ -19,7 +19,7 @@ class TiendaService extends BaseService
         $page = $request->get('page');
         $pageSize = $request->get('pageSize');
 
-        $query = Tienda::query();
+        $query = Categoria::query();
 
         $query->orderBy($orderKey, $orderValue);
         foreach ($searchKey as $item) {
@@ -27,7 +27,7 @@ class TiendaService extends BaseService
         }
         $total = $query->count();
 
-        $tiendas = $query->offset(($page -1 ) *$pageSize) -> limit($pageSize)->get();
+        $categorias = $query->offset(($page -1 ) *$pageSize) -> limit($pageSize)->get();
 
         $pagination ['page'] = $page;
         $pagination ['pageSize'] = $pageSize;
@@ -35,20 +35,20 @@ class TiendaService extends BaseService
         $pagination ['lastPage'] = ceil($total/$pageSize);
 
         $resultado = array();
-        foreach ($tiendas as $tienda) {
+        foreach ($categorias as $categoria) {
 
             $resultado [] = [
-                'id' => $tienda->id,
-                'nombre' => $tienda->nombre,
-                'estado' => $tienda->estado
+                'id' => $categoria->id,
+                'nombre' => $categoria->nombre,
+                'estado' => $categoria->estado
             ];
         }
-        return ["success" => true, "tiendas" => $resultado, 'pagination' => $pagination];
+        return ["success" => true, "categorias" => $resultado, 'pagination' => $pagination];
     }
 
     public function CargarDatos($id)
     {
-        $entity = Tienda::findOrFail($id);
+        $entity = Categoria::findOrFail($id);
 
         $resultado = array();
         $array_resultado = array();
@@ -59,26 +59,26 @@ class TiendaService extends BaseService
             $resultado ['estado'] = $entity->estado;
 
             $array_resultado['success'] = true;
-            $array_resultado['tienda'] = $resultado;
+            $array_resultado['categoria'] = $resultado;
 
         } else {
             $array_resultado['success'] = false;
-            $array_resultado['message'] = 'No se pudo encontrar el tienda solicitado';
+            $array_resultado['message'] = 'No se pudo encontrar el categoria solicitado';
         }
         return $array_resultado;
     }
 
-    public function SalvarTienda($request)
+    public function SalvarCategoria($request)
     {
         $validador = Validator::make($request->all(), [
-            'nombre' => 'unique:tienda,nombre',
+            'categoria' => 'unique:Categoria,nombre',
         ]);
 
-        if (count($validador->errors()) > 0 && $validador->errors()->has('nombre')) {
-            return ['success' => false, 'message' => 'El tienda proporcionada ya se encuentra registrada'];
+        if (count($validador->errors()) > 0 && $validador->errors()->has('categoria')) {
+            return ['success' => false, 'message' => 'El categoria proporcionada ya se encuentra registrada'];
         }
 
-        $entity = new Tienda();
+        $entity = new Categoria();
 
         $entity->nombre = $request->get('nombre');
         $entity->estado = $request->get('estado');
@@ -88,15 +88,17 @@ class TiendaService extends BaseService
         return ['success' => true, 'message' => 'La operación se realizo correctamente'];
     }
 
-    public function EditarTienda($request)
+    public function EditarCategoria($request)
     {
-        $tienda = Tienda::where('nombre', $request->get('nombre'))->first();
+        $validador = Validator::make($request->all(), [
+            'categoria' => 'unique:Categoria,nombre',
+        ]);
 
-        if (!empty($tienda) && $tienda->id != $request->get('id')) {
-            return ['success' => false, 'message' => 'El tienda proporcionada ya se encuentra registrada'];
+        if (count($validador->errors()) > 0 && $validador->errors()->has('categoria')) {
+            return ['success' => false, 'message' => 'El categoría proporcionada ya se encuentra registrada'];
         }
 
-        $entity = Tienda::find($request->get('id'));
+        $entity = Categoria::find($request->get('id'));
         if ($entity != null) {
             $entity->nombre = $request->get('nombre');
             $entity->estado = $request->get('estado');
@@ -104,19 +106,19 @@ class TiendaService extends BaseService
 
             return ['success' => true, 'message' => 'La operación se realizó correctamente'];
         }
-        return ['success' => false, 'message' => 'La tienda solicitada no se encuentra registrada en el sistema'];
+        return ['success' => false, 'message' => 'La categoria solicitada no se encuentra registrada en el sistema'];
     }
 
-    public function EliminarTienda($id)
+    public function EliminarCategoria($id)
     {
-        $entity = Tienda::find($id);
-        $usuarios = User::firstWhere('tienda_id', $id);
+        $entity = Categoria::find($id);
+        $usuarios = User::firstWhere('categoria_id', $id);
 
         if (!$usuarios && $entity) {
             $entity->delete();
             return ['success' => true, "message" => "La operación se ha realizado correctamente"];
         }
 
-        return ['success' => false, "message" => "La operación no se ha realizado debido a que el tienda posee usuarios asociados"];
+        return ['success' => false, "message" => "La operación no se ha realizado debido a que el categoria posee usuarios asociados"];
     }
 }

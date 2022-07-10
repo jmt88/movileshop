@@ -1,22 +1,6 @@
 <nz-card [nzBordered]="false" nzTitle="Administrar Tiendas del Sistema" [nzExtra]="buttonsTemplate">
     <div nz-row>
         <div nz-col nzSpan="24">
-            <div nz-col nzSpan="12" style="padding: 10px; position: absolute;
-                top: 0;
-                right: 10px;">
-                <div class="row">
-                    <div class="col-md-8">
-                        <input nz-input type="text" [(ngModel)]="nombre" (change)="buscar($event)" placeholder="Buscar">
-                    </div>
-                    <div class="col-md-4">
-                        <button nz-button nzType="primary" (click)="buscar($event)">
-                            <i nz-icon nzType="search"></i>
-                            Buscar
-                        </button>
-                    </div>
-                </div>
-
-            </div>
             <div class="send-request" style="margin-top: 55px">
                 <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="tiendas" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
                     <thead>
@@ -27,6 +11,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>
+                                <nz-input-group [nzSuffix]="suffixIconSearch">
+                                    <input nz-input type="text" [(ngModel)]="nombre" (change)="buscar($event)">
+                                </nz-input-group>
+                            </td>
+                        </tr>
                         <tr *ngFor="let data of rowSelectionTable.data">
                             <td>{{ data.nombre }}</td>
                             <td>{{ data.estado ? 'Si' : 'No' }}</td>
@@ -47,4 +38,8 @@
             <i nz-icon nzType="plus"></i><span>Adicionar</span>
         </button>
     </div>
+</ng-template>
+
+<ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
 </ng-template>
