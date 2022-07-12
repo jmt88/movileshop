@@ -55,10 +55,10 @@ class PerfilService extends BaseService
             $resultado [] = [
                 'id' => $permiso->views->id,
                 'nombre' => $permiso->views->nombre,
-                'ver' => $permiso->ver ? true: false,
-                'crear' => $permiso->crear ? true: false,
-                'modificar' => $permiso->modificar ? true: false,
-                'eliminar' => $permiso->eliminar ? true: false,
+                'ver' => $permiso->ver ? true : false,
+                'crear' => $permiso->crear ? true : false,
+                'modificar' => $permiso->modificar ? true : false,
+                'eliminar' => $permiso->eliminar ? true : false,
                 'posicion' => $key
             ];
         }
@@ -70,10 +70,10 @@ class PerfilService extends BaseService
     {
         $validador = Validator::make($request->all(), [
             'perfil' => 'unique:rol,perfil',
-         ]);
+        ]);
 
-        if(count($validador->errors()) > 0 && $validador->errors()->has('perfil')) {
-               return ['success' => false, 'message' => 'El perfil proporcionado ya se encuentra asignado'];
+        if (count($validador->errors()) > 0 && $validador->errors()->has('perfil')) {
+            return ['success' => false, 'message' => 'El perfil proporcionado ya se encuentra asignado'];
         }
 
         $permisos = $request->get('permisos');
@@ -96,22 +96,28 @@ class PerfilService extends BaseService
             $permiso_perfil->save();
         }
 
-        return ['success'=> true, 'message'=>'La operación se realizo correctamente'];
+        return ['success' => true, 'message' => 'La operación se realizo correctamente'];
     }
 
     public function EditarPerfil($request)
     {
+        $rol = Rol::where('perfil', $request->get('perfil'))->first();
+
+        if (!empty($rol) && $rol->id != $request->get('id')) {
+            return ['success' => false, 'message' => 'El perfil proporcionado ya se encuentra registrado'];
+        }
+
         $permisos = $request->get('permisos');
         $permisos = $permisos != null ? json_decode($permisos) : [];
 
         $entity = Rol::find($request->get('id'));
-        if($entity != null) {
+        if ($entity != null) {
             $entity->perfil = $request->get('perfil');
             $entity->save();
 
             foreach ($permisos as $permiso) {
                 $permiso_perfil = PermisoRol::where('rol_id', $entity->id)->where('views_id', $permiso->id)->first();
-                if(!$permiso_perfil) {
+                if (!$permiso_perfil) {
                     $permiso_perfil = new PermisoRol();
                     $permiso_perfil->rol_id = $entity->id;
                     $permiso_perfil->views_id = $permiso->id;
@@ -124,19 +130,21 @@ class PerfilService extends BaseService
                 $permiso_perfil->save();
             }
 
-            return ['success'=> true, 'message'=>'La operación se realizo correctamente'];
+            return ['success' => true, 'message' => 'La operación se realizo correctamente'];
         }
-        return ['success'=> false, 'message'=>'El perfil solicitado no se encuentra registrado en el sistema'];
+        return ['success' => false, 'message' => 'El perfil solicitado no se encuentra registrado en el sistema'];
     }
-    public  function EliminarPerfil($id) {
+
+    public function EliminarPerfil($id)
+    {
         $entity = Rol::find($id);
         $usuarios = User::firstWhere('rol_id', $id);
 
-        if(!$usuarios && $entity) {
+        if (!$usuarios && $entity) {
             $entity->delete();
-            return ['success'=>true, "message"=> "La operación se ha realizado correctamente"];
+            return ['success' => true, "message" => "La operación se ha realizado correctamente"];
         }
 
-        return ['success'=>false, "message"=> "La operación no se ha realizado debido a que el perfil posee usuarios asociados"];
+        return ['success' => false, "message" => "La operación no se ha realizado debido a que el perfil posee usuarios asociados"];
     }
 }

@@ -4,22 +4,20 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
-import { ImportarUsuarioComponent } from '../importar-usuario/importar-usuario.component';
-import { UsuarioFormComponent } from '../usuario-form/usuario-form.component';
-import { UsuarioService } from '../usuario.service';
+import { ProductoFormComponent } from '../producto-form/producto-form.component';
+import { ProductoService } from '../producto.service';
 
 @Component({
-  selector: 'app-usuario',
-  templateUrl: './usuario.component.html',
-  styleUrls: ['./usuario.component.scss']
+  selector: 'app-producto',
+  templateUrl: './producto.component.html',
+  styleUrls: ['./producto.component.scss']
 })
-export class UsuarioComponent implements OnInit {
+export class ProductoComponent implements OnInit {
   isLoading = false;
   disabled = true;
   
   permisos: any = null;
 
-  perfiles: any [] = [];
   rutas: any [] = [];
   modalVisible = false;
   ldapConfigurado = false;
@@ -34,37 +32,42 @@ export class UsuarioComponent implements OnInit {
   searchKey: any[] = [];
   
   nombre = "";
-  username = "";
-  email = "";
+  temp: any;
 
   searchValue: any= "";
 
   
-  constructor(private authService: AuthService, private usuarioService: UsuarioService, 
+  constructor(private authService: AuthService, private productoService: ProductoService, 
     private errorService: ErrorService, private modal: NzModalService, 
     private viewContainerRef: ViewContainerRef, private cdr: ChangeDetectorRef, private messageService: NzMessageService) {
-        this.permisos = this.authService.canexecute('/usuarios');
-        
-     }
+        this.permisos = this.authService.canexecute('/productos');
+        this.temp = this.authService.getSessionUser();
+        console.log(this.temp)
+  }
   
   
-  usuarios: any[] = [];
+  productos: any[] = [];
+  tiendas: any[] = [];
+  categorias: any[] = [];
   ngOnInit(): void {
+    console.log(this.temp)
     this.isLoading=true;
-   this.listarUsuarios();
-   this.usuarioService.listarTodosUsuarios().subscribe(data => {
+   this.listarProductos();
+   this.productoService.listarTodosProductos().subscribe(data => {
      if(data.success) {
-       this.perfiles = data.perfiles;
+       this.tiendas = data.tiendas;
+       this.categorias = data.categorias;
+       this.productos = data.productos;
        this.rutas = data.permiso;
      }
    })
   }
 
-  listarUsuarios() {
+  listarProductos() {
       this.isLoading = true;
-    this.usuarioService.listar(this.page, this.pageSize, this.orderKey, this.orderValue, this.searchKey).subscribe(data => {
+    this.productoService.listar(this.page, this.pageSize, this.orderKey, this.orderValue, this.searchKey).subscribe(data => {
       if(data.success) {
-        this.usuarios = data.usuarios;
+        this.productos = data.productos;
         this.ldapConfigurado = data.ldap;
         this.total = data.pagination.total;
         this.page = data.pagination.page;
@@ -86,49 +89,30 @@ export class UsuarioComponent implements OnInit {
 
   mostrarModal(id?:number) {
       const modal = this.modal.create({
-        nzContent: UsuarioFormComponent,
+        nzContent: ProductoFormComponent,
         nzViewContainerRef: this.viewContainerRef,
         nzKeyboard: false,
         nzMaskClosable: false,
         nzClosable: false,
         nzCentered: true,
         nzFooter: null,
-        nzWidth: '100%',
+        nzWidth: '50%',
         nzComponentParams: {
           id: id,
-          perfiles: this.perfiles,
+          categorias: this.categorias,
+          tiendas: this.tiendas,
           permisosEntrada: this.rutas
         },
       });
       modal.afterClose.subscribe(data => {
         if(data.data) {
-          this.listarUsuarios();
+          this.listarProductos();
           
         }
       });
   }
   
   
-  mostrarModalImportarUsuarios() {
-      const modal = this.modal.create({
-        nzContent: ImportarUsuarioComponent,
-        nzViewContainerRef: this.viewContainerRef,
-        nzKeyboard: false,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzCentered: true,
-        nzFooter: null,
-        nzWidth: '100%',
-        nzComponentParams: {
-        },
-      });
-      modal.afterClose.subscribe(data => {
-        if(data.data) {
-          this.listarUsuarios();
-        }
-      });
-  }
-
   mostrarModalEliminar(id:number) {
     this.modal.confirm({
       nzTitle: 'Eliminar Elemento',
@@ -143,10 +127,10 @@ export class UsuarioComponent implements OnInit {
 
   eliminar(id: number) {
      this.isLoading = true;
-     this.usuarioService.eliminarUsuario(id).subscribe(data=> {
+     this.productoService.eliminarProducto(id).subscribe(data=> {
        this.isLoading = false;
        if(data.success) {
-         this.listarUsuarios();
+         this.listarProductos();
          this.messageService.success(data.message);
        }else {
          this.messageService.error(data.message);
@@ -173,7 +157,7 @@ export class UsuarioComponent implements OnInit {
       this.orderKey = 'nombre';
       this.orderValue = 'asc';
     }
-   this.listarUsuarios();
+   this.listarProductos();
   }
 
   buscar(value:any) {
@@ -187,23 +171,6 @@ export class UsuarioComponent implements OnInit {
       );
     }
     
-    if(this.username != "") {
-      this.searchKey.push(
-        {
-          key: 'username',
-          value: this.username
-        },
-      );
-    }
-    if(this.email != "") {
-      this.searchKey.push(
-        {
-          key: 'email',
-          value: this.email
-        },
-      );
-    }
-
-    this.listarUsuarios();
+    this.listarProductos();
   }
 }

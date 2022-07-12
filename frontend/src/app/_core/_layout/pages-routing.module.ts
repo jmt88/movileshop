@@ -56,6 +56,18 @@ export const routes: Routes = [
         canActivate: [LoginGuard],
         loadChildren: () =>
           import('./../../pages/tienda/tienda.module').then((m) => m.TiendaModule)
+      },
+      {
+        path: 'categorias',
+        canActivate: [LoginGuard],
+        loadChildren: () =>
+          import('./../../pages/categoria/categoria.module').then((m) => m.CategoriaModule)
+      },
+      {
+        path: 'productos',
+        canActivate: [LoginGuard],
+        loadChildren: () =>
+          import('./../../pages/producto/producto.module').then((m) => m.ProductoModule)
       }
     ]
   }

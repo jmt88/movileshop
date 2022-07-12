@@ -8,6 +8,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TiendaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboarController;
+use App\Http\Controllers\ProductoController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -58,4 +59,12 @@ Route::post('/salvarCategoria', [CategoriaController::class, 'salvarCategoria'])
 Route::post('/cargarDatosCategoria', [CategoriaController::class, 'cargarDatosCategoria'])->middleware('auth:api');
 Route::post('/editarCategoria', [CategoriaController::class, 'editarCategoria'])->middleware('auth:api');
 Route::post('/eliminarCategoria', [CategoriaController::class, 'eliminarCategoria'])->middleware('auth:api');
+
+//ProductosRoutes
+Route::post('/listarProductos', [ProductoController::class, 'listarProductos'])->middleware('auth:api');
+Route::post('/salvarProducto', [ProductoController::class, 'salvarProducto'])->middleware('auth:api');
+Route::post('/cargarDatosProducto', [ProductoController::class, 'cargarDatosProducto'])->middleware('auth:api');
+Route::post('/editarProducto', [ProductoController::class, 'editarProducto'])->middleware('auth:api');
+Route::post('/eliminarProducto', [ProductoController::class, 'eliminarProducto'])->middleware('auth:api');
+Route::post('/listarInformacionRequerida', [ProductoController::class, 'listarInformacionRequerida'])->middleware('auth:api');
 

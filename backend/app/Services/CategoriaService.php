@@ -40,6 +40,7 @@ class CategoriaService extends BaseService
             $resultado [] = [
                 'id' => $categoria->id,
                 'nombre' => $categoria->nombre,
+                'descripcion' => $categoria->descripcion,
                 'estado' => $categoria->estado
             ];
         }
@@ -56,6 +57,7 @@ class CategoriaService extends BaseService
 
             $resultado ['id'] = $entity->id;
             $resultado ['nombre'] = $entity->nombre;
+            $resultado ['descripcion'] = $entity->descripcion;
             $resultado ['estado'] = $entity->estado;
 
             $array_resultado['success'] = true;
@@ -63,7 +65,7 @@ class CategoriaService extends BaseService
 
         } else {
             $array_resultado['success'] = false;
-            $array_resultado['message'] = 'No se pudo encontrar el categoria solicitado';
+            $array_resultado['message'] = 'No se pudo encontrar el categoría solicitada';
         }
         return $array_resultado;
     }
@@ -75,17 +77,18 @@ class CategoriaService extends BaseService
         ]);
 
         if (count($validador->errors()) > 0 && $validador->errors()->has('categoria')) {
-            return ['success' => false, 'message' => 'El categoria proporcionada ya se encuentra registrada'];
+            return ['success' => false, 'message' => 'La categoría proporcionada ya se encuentra registrada'];
         }
 
         $entity = new Categoria();
 
         $entity->nombre = $request->get('nombre');
+        $entity->descripcion = $request->get('descripcion');
         $entity->estado = $request->get('estado');
 
         $entity->save();
 
-        return ['success' => true, 'message' => 'La operación se realizo correctamente'];
+        return ['success' => true, 'message' => 'La operación se realizó correctamente'];
     }
 
     public function EditarCategoria($request)
@@ -95,30 +98,31 @@ class CategoriaService extends BaseService
         ]);
 
         if (count($validador->errors()) > 0 && $validador->errors()->has('categoria')) {
-            return ['success' => false, 'message' => 'El categoría proporcionada ya se encuentra registrada'];
+            return ['success' => false, 'message' => 'La categoría proporcionada ya se encuentra registrada'];
         }
 
         $entity = Categoria::find($request->get('id'));
         if ($entity != null) {
             $entity->nombre = $request->get('nombre');
+            $entity->descripcion = $request->get('descripcion');
             $entity->estado = $request->get('estado');
             $entity->save();
 
             return ['success' => true, 'message' => 'La operación se realizó correctamente'];
         }
-        return ['success' => false, 'message' => 'La categoria solicitada no se encuentra registrada en el sistema'];
+        return ['success' => false, 'message' => 'La categoría solicitada no se encuentra registrada en el sistema'];
     }
 
     public function EliminarCategoria($id)
     {
         $entity = Categoria::find($id);
-        $usuarios = User::firstWhere('categoria_id', $id);
+//        $productos = Producto::firstWhere('categoria_id', $id);
 
-        if (!$usuarios && $entity) {
+        if ($entity) {
             $entity->delete();
             return ['success' => true, "message" => "La operación se ha realizado correctamente"];
         }
 
-        return ['success' => false, "message" => "La operación no se ha realizado debido a que el categoria posee usuarios asociados"];
+        return ['success' => false, "message" => "La operación no se ha realizado debido a que el categoría posee productos asociados"];
     }
 }

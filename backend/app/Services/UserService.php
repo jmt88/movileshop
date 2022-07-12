@@ -4,7 +4,6 @@
 namespace App\Services;
 
 
-use App\Models\Cuotas;
 use App\Models\PermisoUsuario;
 use App\Models\Views;
 use Illuminate\Support\Facades\Auth;
@@ -163,6 +162,12 @@ class UserService extends BaseService
 
     public function EditarUsuario($request)
     {
+        $usuario = User::where('nombre', $request->get('nombre'))->first();
+
+        if (!empty($usuario) && $usuario->id != $request->get('id')) {
+            return ['success' => false, 'message' => 'El usuario proporcionado ya se encuentra registrado'];
+        }
+
         $permisos = $request->get('permisos');
         $permisos = $permisos != null ? json_decode($permisos) : [];
 

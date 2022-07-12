@@ -85,7 +85,7 @@ export class PerfilComponent implements OnInit {
   mostrarModalEliminar(id:number) {
     this.modal.confirm({
       nzTitle: 'Eliminar Elemento',
-      nzContent: 'Usted ha dispuesto eliminar el elemento. ¿Está seguro que desea eleminar el elemento ?',
+      nzContent: 'Usted ha dispuesto eliminar el elemento. ¿Está seguro que desea eliminar el elemento ?',
       nzOkText: 'Eliminar',
       nzCancelText: 'Cancelar',
       nzOkDanger: true,

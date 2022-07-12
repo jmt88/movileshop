@@ -11,6 +11,11 @@
                 </nz-form-item>
 
                 <nz-form-item>
+                    <nz-form-label nzFor="descripcion">Descripción</nz-form-label>
+                    <textarea nz-input placeholder="Descripción" formControlName="descripcion" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-item>
+
+                <nz-form-item>
                     <nz-form-label nzFor="estado">Estado</nz-form-label>
                     <nz-switch [ngModel]="true" nzCheckedChildren="Activo" nzUnCheckedChildren="Inactivo" formControlName="estado"></nz-switch>
                 </nz-form-item>
