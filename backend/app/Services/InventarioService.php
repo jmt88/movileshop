@@ -16,28 +16,6 @@ use function PHPUnit\Framework\isEmpty;
 
 class InventarioService extends BaseService
 {
-    public function ListarInformacionRequeridaInventarios()
-    {
-        $tiendas = Tienda::where('estado', true)->get();
-        $productos = Producto::where('estado', true)->get();
-
-        $permisos = Views::all();
-        $array_permiso = array();
-        foreach ($permisos as $key => $permiso) {
-            $array_permiso [] = [
-                'id' => $permiso->id,
-                'nombre' => $permiso->nombre,
-                'ver' => false,
-                'crear' => false,
-                'modificar' => false,
-                'eliminar' => false,
-                'posicion' => $key
-            ];
-        }
-
-        return ['success' => true, 'tiendas' => $tiendas, 'productos' => $productos, 'permiso' => $array_permiso];
-    }
-
     public function ListarInventarios($request)
     {
         $resultado = array();
@@ -107,8 +85,8 @@ class InventarioService extends BaseService
         if(isEmpty($entity))
             $entity = new Inventario();
 
-        $entity->cantidad = $request->get('cantidad');
-        $entity->existencia = $request->get('existencia');
+        $entity->cantidad += $request->get('cantidad');
+        $entity->existencia += $request->get('existencia');
         $entity->tienda = $request->get('tienda');
         $entity->producto = $request->get('producto');
         $entity->save();
@@ -121,7 +99,7 @@ class InventarioService extends BaseService
         $entity = Inventario::where('tienda', $request->get('tienda'))->and('producto', $request->get('producto'))->get();
 
         if ($entity != null) {
-            if($request->get('cantidad') > $entity->cantidad) {
+            if($request->get('cantidad') >= $entity->cantidad) {
                 return ['success' => false, 'message' => 'No es posible realizar la opreción, la cantidad a retirar excede a la cantidad existente'];
             }
             $entity->cantidad -= $request->get('cantidad');

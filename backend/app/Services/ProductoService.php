@@ -17,6 +17,7 @@ class ProductoService extends BaseService
     public function ListarInformacionRequeridaProductos()
     {
         $categorias = Categoria::where('estado', true)->get();
+        $tiendas = Tienda::where('estado', true)->get();
 
         $permisos = Views::all();
         $array_permiso = array();
@@ -32,7 +33,7 @@ class ProductoService extends BaseService
             ];
         }
 
-        return ['success' => true, 'categorias' => $categorias, 'permiso' => $array_permiso];
+        return ['success' => true, 'categorias' => $categorias, 'tiendas' => $tiendas, 'permiso' => $array_permiso];
     }
 
     public function ListarProductos($request)

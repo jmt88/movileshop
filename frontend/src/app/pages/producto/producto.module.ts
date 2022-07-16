@@ -23,6 +23,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { ProductoDistribuirComponent } from './producto-distribuir/producto-distribuir.component';
 const routes: Routes = [{
   path: '',
   component: ProductoComponent
@@ -32,8 +33,9 @@ const routes: Routes = [{
   declarations: [
     ProductoComponent,
     ProductoFormComponent,
+    ProductoDistribuirComponent,
   ],
-  entryComponents:[ProductoFormComponent],
+  entryComponents:[ProductoFormComponent, ProductoDistribuirComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

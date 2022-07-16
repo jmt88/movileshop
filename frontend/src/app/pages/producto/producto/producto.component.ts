@@ -4,6 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
+import { ProductoDistribuirComponent } from '../producto-distribuir/producto-distribuir.component';
 import { ProductoFormComponent } from '../producto-form/producto-form.component';
 import { ProductoService } from '../producto.service';
 
@@ -47,12 +48,14 @@ export class ProductoComponent implements OnInit {
   
   productos: any[] = [];
   categorias: any[] = [];
+  tiendas: any[] = [];
   ngOnInit(): void {
     this.isLoading=true;
    this.listarProductos();
    this.productoService.listarTodosProductos().subscribe(data => {
      if(data.success) {
        this.categorias = data.categorias;
+       this.tiendas = data.tiendas;
        this.productos = data.productos;
        this.rutas = data.permiso;
      }
@@ -175,5 +178,34 @@ export class ProductoComponent implements OnInit {
     }
     
     this.listarProductos();
+  }
+
+
+  distribuir(producto_id: any) {
+    const modal = this.modal.create({
+      nzContent: ProductoDistribuirComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzKeyboard: false,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzCentered: true,
+      nzFooter: null,
+      nzWidth: '35%',
+      nzComponentParams: {
+        producto: producto_id,
+        tiendas: this.tiendas,
+        permisosEntrada: this.rutas
+      },
+    });
+    modal.afterClose.subscribe(data => {
+      if(data.data) {
+        this.listarProductos();
+        
+      }
+    });
+  }
+  
+  recoger(producto_id: any) {
+
   }
 }

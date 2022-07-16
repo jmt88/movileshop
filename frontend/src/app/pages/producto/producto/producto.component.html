@@ -10,6 +10,7 @@
                             <th id="categoria" nzColumnKey="categoria" [nzSortFn]="true">Categoría</th>
                             <th id="precio_venta" nzColumnKey="precio_venta" [nzSortFn]="true">Precio de Venta</th>
                             <th id="cantidad" nzColumnKey="cantidad" [nzSortFn]="true">Cantidad</th>
+                            <th id="cantidad" nzColumnKey="existencia" [nzSortFn]="true">Existencia</th>
                             <th id="activo">Activo</th>
                             <th id="acciones" class="action-table-buttons" nzWidth="150px"> Acciones</th>
                         </tr>
@@ -33,10 +34,12 @@
                             <td>{{ data.categoria }}</td>
                             <td>{{ data.precio_venta }}</td>
                             <td>{{ data.cantidad }}</td>
+                            <td>{{ data.existencia }}</td>
                             <td>{{ data.estado ? 'Si' : 'No' }}</td>
                             <td class="action-table-buttons">
-                                <button nz-button title="Editar" nzSize="small" (click)="editar(data.id)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="edit"></i></button>
-                                <button nz-button nzSize="small" title="Eliminar" (click)="mostrarModalEliminar(data.id)" *ngIf="permisos.eliminar" nzType="primary" class="danger" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                                <button nz-button title="Editar" nzSize="small" (click)="editar(data.id)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 5px;" nzShape="round"><i nz-icon nzType="edit"></i></button>
+                                <button nz-button nzSize="small" title="Distribuir" (click)="distribuir(data.id)" *ngIf="permisos.modificar && data.existencia > 0" nzType="primary" class="primary" nzShape="round" style="margin-right: 5px;"><i nz-icon nzType="plus"></i></button>
+                                <button nz-button nzSize="small" title="Recoger" (click)="recoger(data.id)" *ngIf="permisos.modificar" nzType="primary" class="danger" nzShape="round"><i nz-icon nzType="minus"></i></button>
                             </td>
                         </tr>
                     </tbody>

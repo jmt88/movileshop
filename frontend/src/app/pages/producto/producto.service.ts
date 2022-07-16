@@ -15,6 +15,13 @@ interface Producto {
   existencia: number,
   estado: boolean,
 }
+
+interface Inventario {
+  id?: any,
+  producto: any,
+  tienda: any,
+  cantidad: any,
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -76,6 +83,22 @@ export class ProductoService {
   
   listarTodosProductos() {
     return this.http.post<any>(`${this.apiUrl}/listarInformacionRequerida`, {
+    });
+  }
+
+  distribuirProducto(inventario: Inventario) {
+    return this.http.post<any>(`${this.apiUrl}/distribuirProducto`, {
+      producto: inventario.producto,
+      tienda: inventario.tienda,
+      cantidad: inventario.cantidad,
+    });
+  }
+  
+  recogerProducto(inventario: Inventario) {
+    return this.http.post<any>(`${this.apiUrl}/distribuirProducto`, {
+      producto: inventario.producto,
+      tienda: inventario.tienda,
+      cantidad: inventario.cantidad,
     });
   }
   

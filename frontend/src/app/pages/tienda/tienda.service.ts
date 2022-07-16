@@ -57,6 +57,5 @@ export class TiendaService {
     return this.http.post<any>(`${this.apiUrl}/listarInformacionRequerida`, {
     });
   }
-  
 
 }
