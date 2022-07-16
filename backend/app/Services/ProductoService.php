@@ -16,7 +16,6 @@ class ProductoService extends BaseService
 {
     public function ListarInformacionRequeridaProductos()
     {
-        $tiendas = Tienda::where('estado', true)->get();
         $categorias = Categoria::where('estado', true)->get();
 
         $permisos = Views::all();
@@ -33,7 +32,7 @@ class ProductoService extends BaseService
             ];
         }
 
-        return ['success' => true, 'tiendas' => $tiendas, 'categorias' => $categorias, 'permiso' => $array_permiso];
+        return ['success' => true, 'categorias' => $categorias, 'permiso' => $array_permiso];
     }
 
     public function ListarProductos($request)
@@ -48,7 +47,6 @@ class ProductoService extends BaseService
         $page = $request->get('page');
         $pageSize = $request->get('pageSize');
 
-        $productos = array();
         $query = Producto::query();
 
         $query->orderBy($orderKey, $orderValue);
@@ -67,12 +65,14 @@ class ProductoService extends BaseService
         foreach ($productos as $producto) {
             $resultado [] = [
                 'id' => $producto->id,
+                'codigo' => $producto->codigo,
                 'nombre' => $producto->nombre,
                 'descripcion' => $producto->descripcion,
                 'precio_venta' => $producto->precio_venta,
                 'precio_compra' => $producto->precio_compra,
                 'categoria' => $producto->categoria->nombre,
-                'tienda' => $producto->tienda != null ? $producto->tienda->nombre : "",
+                'cantidad' => $producto->cantidad,
+                'existencia' => $producto->existencia,
                 'estado' => $producto->estado,
             ];
         }
@@ -88,14 +88,16 @@ class ProductoService extends BaseService
         if ($entity != null) {
 
             $resultado ['id'] = $entity->id;
+            $resultado ['codigo'] = $entity->codigo;
             $resultado ['nombre'] = $entity->nombre;
             $resultado ['descripcion'] = $entity->descripcion;
             $resultado ['precio_venta'] = $entity->precio_venta;
             $resultado ['precio_compra'] = $entity->precio_compra;
+            $resultado ['cantidad'] = $entity->cantidad;
+            $resultado ['existencia'] = $entity->existencia;
             $resultado ['categoria'] = $entity->categoria_id;
-            $resultado ['tienda'] = $entity->tienda_id;
 
-            $resultado ['estado'] = $entity->active;
+            $resultado ['estado'] = $entity->estado;
 
             $array_resultado['success'] = true;
             $array_resultado['producto'] = $resultado;
@@ -110,28 +112,30 @@ class ProductoService extends BaseService
     public function SalvarProducto($request)
     {
         $validador = Validator::make($request->all(), [
-            'codigo' => 'unique:productos,nombre',
-            'nombre' => 'unique:productos,nombre',
+            'codigo' => 'unique:producto,codigo',
         ]);
 
         if (count($validador->errors()) > 0) {
             if ($validador->errors()->has('codigo')) {
                 return ['success' => false, 'message' => 'El código proporcionado ya se encuentra asignado'];
             }
-            if ($validador->errors()->has('producto')) {
-                return ['success' => false, 'message' => 'El nombre proporcionado ya se encuentra asignado'];
-            }
+        }
+
+        if ($request->get('existencia') > $request->get('cantidad')) {
+            return ['success' => false, 'message' => 'La existencia no puede ser mayor a la cantidad'];
         }
 
         $entity = new Producto();
 
+        $entity->codigo = $request->get('codigo');
         $entity->nombre = $request->get('nombre');
         $entity->descripcion = $request->get('descripcion');
         $entity->precio_venta = $request->get('precio_venta');
         $entity->precio_compra = $request->get('precio_compra');
+        $entity->cantidad = $request->get('cantidad');
+        $entity->existencia = $request->get('existencia');
         $entity->estado = $request->get('estado');
         $entity->categoria_id = $request->get('categoria');
-        $entity->tienda_id = $request->get('tienda');
         $entity->save();
 
         return ['success' => true, 'message' => 'La operación se realizó correctamente'];
@@ -143,10 +147,8 @@ class ProductoService extends BaseService
         if (!empty($producto_codigo) && $producto_codigo->id != $request->get('id')) {
             return ['success' => false, 'message' => 'El codigo proporcionado ya se encuentra asignado'];
         }
-
-        $producto_nombre = Producto::where('nombre', $request->get('nombre'))->first();
-        if (!empty($producto_codigo) && $producto_codigo->id != $request->get('id')) {
-            return ['success' => false, 'message' => 'El nombre proporcionado ya se encuentra asignado'];
+        if ($request->get('existencia') > $request->get('cantidad')) {
+            return ['success' => false, 'message' => 'La existencia no puede ser mayor a la cantidad'];
         }
 
         $entity = Producto::find($request->get('id'));
@@ -155,9 +157,10 @@ class ProductoService extends BaseService
             $entity->descripcion = $request->get('descripcion');
             $entity->precio_venta = $request->get('precio_venta');
             $entity->precio_compra = $request->get('precio_compra');
+            $entity->cantidad = $request->get('cantidad');
+            $entity->existencia = $request->get('existencia');
             $entity->estado = $request->get('estado');
             $entity->categoria_id = $request->get('categoria');
-            $entity->tienda_id = $request->get('tienda');
             $entity->save();
 
             return ['success' => true, 'message' => 'La operación se realizó correctamente'];

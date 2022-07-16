@@ -5,12 +5,14 @@ import { appConfig } from 'src/app/appConfig';
 
 interface Producto {
   id?: any,
+  codigo: any,
   nombre: any,
   descripcion: any,
-  precio_venta: any,
-  precio_compra: any,
+  precio_venta: number,
+  precio_compra: number,
   categoria: any,
-  tienda: any,
+  cantidad: number,
+  existencia: number,
   estado: boolean,
 }
 @Injectable({
@@ -39,10 +41,14 @@ export class ProductoService {
 
   adicionarProducto(producto: Producto) {
     return this.http.post<any>(`${this.apiUrl}/salvarProducto`, {
+      codigo: producto.codigo,
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio_venta: producto.precio_venta,
       precio_compra: producto.precio_compra,
+      categoria: producto.categoria,
+      existencia: producto.existencia,
+      cantidad: producto.cantidad,
       estado: producto.estado,
     });
   }
@@ -50,10 +56,14 @@ export class ProductoService {
   modificarProducto(producto: Producto) {
     return this.http.post<any>(`${this.apiUrl}/editarProducto`, {
       id: producto.id,
+      codigo: producto.codigo,
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio_venta: producto.precio_venta,
       precio_compra: producto.precio_compra,
+      categoria: producto.categoria,
+      existencia: producto.existencia,
+      cantidad: producto.cantidad,
       estado: producto.estado,
     });
   }

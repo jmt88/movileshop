@@ -16,15 +16,13 @@ class Producto extends Model
         'precio_compra',
         'nombre',
         'descripción',
+        'cantidad',
+        'existencia',
         'estado',
-        'categoria_id',
-        'tienda_id'
+        'categoria_id'
     ];
 
     public function categoria() {
         return $this->belongsTo(Categoria::class);
-    }
-    public function tienda() {
-        return $this->belongsTo(Tienda::class);
     }
 }

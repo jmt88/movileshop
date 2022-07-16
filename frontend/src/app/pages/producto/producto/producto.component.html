@@ -5,8 +5,11 @@
                 <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="productos" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
                     <thead>
                         <tr>
+                            <th id="codigo" nzColumnKey="codigo" [nzSortFn]="true">Código</th>
                             <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Nombre</th>
-                            <th id="descripcion" nzColumnKey="descripcion" [nzSortFn]="true">Descripción</th>
+                            <th id="categoria" nzColumnKey="categoria" [nzSortFn]="true">Categoría</th>
+                            <th id="precio_venta" nzColumnKey="precio_venta" [nzSortFn]="true">Precio de Venta</th>
+                            <th id="cantidad" nzColumnKey="cantidad" [nzSortFn]="true">Cantidad</th>
                             <th id="activo">Activo</th>
                             <th id="acciones" class="action-table-buttons" nzWidth="150px"> Acciones</th>
                         </tr>
@@ -15,13 +18,21 @@
                         <tr>
                             <td>
                                 <nz-input-group [nzSuffix]="suffixIconSearch">
+                                    <input nz-input type="text" [(ngModel)]="codigo" (change)="buscar($event)">
+                                </nz-input-group>
+                            </td>
+                            <td>
+                                <nz-input-group [nzSuffix]="suffixIconSearch">
                                     <input nz-input type="text" [(ngModel)]="nombre" (change)="buscar($event)">
                                 </nz-input-group>
                             </td>
                         </tr>
                         <tr *ngFor="let data of rowSelectionTable.data">
+                            <td>{{ data.codigo }}</td>
                             <td>{{ data.nombre }}</td>
-                            <td>{{ data.descripcion }}</td>
+                            <td>{{ data.categoria }}</td>
+                            <td>{{ data.precio_venta }}</td>
+                            <td>{{ data.cantidad }}</td>
                             <td>{{ data.estado ? 'Si' : 'No' }}</td>
                             <td class="action-table-buttons">
                                 <button nz-button title="Editar" nzSize="small" (click)="editar(data.id)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="edit"></i></button>

@@ -31,8 +31,9 @@ export class ProductoComponent implements OnInit {
   
   searchKey: any[] = [];
   
+  categoria = "";
+  codigo = "";
   nombre = "";
-  temp: any;
 
   searchValue: any= "";
 
@@ -41,21 +42,16 @@ export class ProductoComponent implements OnInit {
     private errorService: ErrorService, private modal: NzModalService, 
     private viewContainerRef: ViewContainerRef, private cdr: ChangeDetectorRef, private messageService: NzMessageService) {
         this.permisos = this.authService.canexecute('/productos');
-        this.temp = this.authService.getSessionUser();
-        console.log(this.temp)
   }
   
   
   productos: any[] = [];
-  tiendas: any[] = [];
   categorias: any[] = [];
   ngOnInit(): void {
-    console.log(this.temp)
     this.isLoading=true;
    this.listarProductos();
    this.productoService.listarTodosProductos().subscribe(data => {
      if(data.success) {
-       this.tiendas = data.tiendas;
        this.categorias = data.categorias;
        this.productos = data.productos;
        this.rutas = data.permiso;
@@ -100,7 +96,6 @@ export class ProductoComponent implements OnInit {
         nzComponentParams: {
           id: id,
           categorias: this.categorias,
-          tiendas: this.tiendas,
           permisosEntrada: this.rutas
         },
       });
@@ -162,6 +157,14 @@ export class ProductoComponent implements OnInit {
 
   buscar(value:any) {
      this.searchKey = [];
+    if(this.codigo != "") {
+      this.searchKey.push(
+        {
+          key: 'codigo',
+          value: this.codigo
+        },
+      );
+    }
     if(this.nombre != "") {
       this.searchKey.push(
         {

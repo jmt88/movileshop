@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\Producto;
 use App\Models\Tienda;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -111,12 +112,13 @@ class TiendaService extends BaseService
     {
         $entity = Tienda::find($id);
         $usuarios = User::firstWhere('tienda_id', $id);
+        $productos = Producto::firstWhere('tienda_id', $id);
 
-        if (!$usuarios && $entity) {
+        if (!$productos && !$usuarios && $entity) {
             $entity->delete();
             return ['success' => true, "message" => "La operación se ha realizado correctamente"];
         }
 
-        return ['success' => false, "message" => "La operación no se ha realizado debido a que el tienda posee usuarios asociados"];
+        return ['success' => false, "message" => "La operación no se ha realizado debido a que la tienda posee usuarios o productos asociados"];
     }
 }

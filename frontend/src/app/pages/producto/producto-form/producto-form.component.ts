@@ -39,7 +39,6 @@ export class ProductoFormComponent implements OnInit{
   @Input() id!: any;
   @Input() permisosEntrada: any[] = [];
   @Input() categorias: any[] = [];
-  @Input() tiendas: any[] = [];
 
   lodading = false;
   formGroup!: FormGroup;
@@ -47,15 +46,18 @@ export class ProductoFormComponent implements OnInit{
   title = "Adicionar Producto";
   local = true;
 
+  login_user: any;
+
   formatterPercent = (value: number): string => `${value} %`;
   parserPercent = (value: string): string => value.replace(' %', '');
   formatterDollar = (value: number): string => `$ ${value}`;
   parserDollar = (value: string): string => value.replace('$ ', '');
 
   constructor(private modalRef: NzModalRef, private messageService: NzMessageService, 
-    private productoService: ProductoService, private fb: FormBuilder, 
+    private productoService: ProductoService, private fb: FormBuilder, private authService: AuthService,
     private errorService: ErrorService, private cdr: ChangeDetectorRef) 
     { 
+      this.login_user = this.authService.getSessionUser();
     }
 
   ngOnInit(): void {
@@ -86,12 +88,14 @@ export class ProductoFormComponent implements OnInit{
 
   crearFormulario() {
     this.formGroup = this.fb.group({
+      codigo: ["", [Validators.required]],
       nombre: ["", [Validators.required]],
       descripcion: ["", []],
       precio_venta: ["", [Validators.required]],
       precio_compra: ["", [Validators.required]],
       categoria: ["", [Validators.required]],
-      tienda: ["", [Validators.required]],
+      cantidad: ["", [Validators.required]],
+      existencia: ["", [Validators.required]],
       estado: ["", [Validators.required]],
     });
   }
@@ -100,12 +104,14 @@ export class ProductoFormComponent implements OnInit{
     this.local = data.local;
     this.crearFormulario();
 
+    this.formGroup.controls['codigo'].setValue(data.codigo);
     this.formGroup.controls['nombre'].setValue(data.nombre);
     this.formGroup.controls['descripcion'].setValue(data.descripcion);
     this.formGroup.controls['precio_venta'].setValue(data.precio_venta);
     this.formGroup.controls['precio_compra'].setValue(data.precio_compra);
     this.formGroup.controls['categoria'].setValue(data.categoria);
-    this.formGroup.controls['tienda'].setValue(data.tienda);
+    this.formGroup.controls['cantidad'].setValue(data.cantidad);
+    this.formGroup.controls['existencia'].setValue(data.existencia);
     this.formGroup.controls['estado'].setValue(data.estado);
     
     this.cdr.detectChanges();
@@ -139,12 +145,14 @@ export class ProductoFormComponent implements OnInit{
       this.lodading = true;
       this.productoService.modificarProducto({
         id: this.id,
+        codigo: this.formGroup.controls['codigo'].value,
         nombre: this.formGroup.controls['nombre'].value,
         descripcion: this.formGroup.controls['descripcion'].value,
         precio_venta: this.formGroup.controls['precio_venta'].value,
         precio_compra: this.formGroup.controls['precio_compra'].value,
         categoria: this.formGroup.controls['categoria'].value,
-        tienda: this.formGroup.controls['tienda'].value,
+        cantidad: this.formGroup.controls['cantidad'].value,
+        existencia: this.formGroup.controls['existencia'].value,
         estado: this.formGroup.controls['estado'].value,
       }).subscribe(data => {
         this.lodading = false;
@@ -164,12 +172,14 @@ export class ProductoFormComponent implements OnInit{
       this.lodading = true;
       this.productoService.adicionarProducto({
         id: this.id,
+        codigo: this.formGroup.controls['codigo'].value,
         nombre: this.formGroup.controls['nombre'].value,
         descripcion: this.formGroup.controls['descripcion'].value,
         precio_venta: this.formGroup.controls['precio_venta'].value,
         precio_compra: this.formGroup.controls['precio_compra'].value,
         categoria: this.formGroup.controls['categoria'].value,
-        tienda: this.formGroup.controls['tienda'].value,
+        cantidad: this.formGroup.controls['cantidad'].value,
+        existencia: this.formGroup.controls['existencia'].value,
         estado: this.formGroup.controls['estado'].value,
       }).subscribe(data => {
         this.lodading = false;

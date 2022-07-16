@@ -31,6 +31,7 @@ class BaseService
                 'username' => $usuario->username,
                 'email' => $usuario->email,
                 'tienda_id' => $usuario->tienda_id,
+                'isAdmin' => $this->isAdmnistrador($usuario->rol_id),
             ];
         }
         return null;
@@ -46,6 +47,7 @@ class BaseService
         $resultado['email'] = $usuario->email;
         $resultado['perfil_id'] = $usuario->rol_id;
         $resultado['perfil'] = $usuario->rol->perfil;
+        $resultado['isAdmin'] = $this->isAdmnistrador($usuario->rol_id);
 
         $permisos = array();
 
@@ -66,7 +68,7 @@ class BaseService
                 $usuario_permiso = $usuario_permiso ? $usuario_permiso : $default;
                 $permiso = $this->getPermiso($usuario_permisos_rol, $usuario_permiso);
 
-                array_push($permisos, [
+                $permisos[] = [
                     'nombre' => $view->nombre,
                     'grupo' => $view->grupo,
                     'metodo' => $view->metodo,
@@ -76,7 +78,7 @@ class BaseService
                     'crear' => $permiso['crear'],
                     'modificar' => $permiso['modificar'],
                     'eliminar' => $permiso['eliminar']
-                ]);
+                ];
             }
         }
         $resultado['permisos'] = $permisos;

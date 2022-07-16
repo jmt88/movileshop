@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\Categoria;
+use App\Models\Producto;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
@@ -116,13 +117,13 @@ class CategoriaService extends BaseService
     public function EliminarCategoria($id)
     {
         $entity = Categoria::find($id);
-//        $productos = Producto::firstWhere('categoria_id', $id);
+        $productos = Producto::firstWhere('tienda_id', $id);
 
-        if ($entity) {
+        if (!$productos && $entity) {
             $entity->delete();
             return ['success' => true, "message" => "La operación se ha realizado correctamente"];
         }
 
-        return ['success' => false, "message" => "La operación no se ha realizado debido a que el categoría posee productos asociados"];
+        return ['success' => false, "message" => "La operación no se ha realizado debido a que la categoría posee productos asociados"];
     }
 }
