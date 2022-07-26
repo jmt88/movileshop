@@ -87,7 +87,7 @@ export class ProductoService {
   }
 
   distribuirProducto(inventario: Inventario) {
-    return this.http.post<any>(`${this.apiUrl}/distribuirProducto`, {
+    return this.http.post<any>(`${this.apiUrl}/distribuirProductos`, {
       producto: inventario.producto,
       tienda: inventario.tienda,
       cantidad: inventario.cantidad,
@@ -95,7 +95,7 @@ export class ProductoService {
   }
   
   recogerProducto(inventario: Inventario) {
-    return this.http.post<any>(`${this.apiUrl}/distribuirProducto`, {
+    return this.http.post<any>(`${this.apiUrl}/recogerProductos`, {
       producto: inventario.producto,
       tienda: inventario.tienda,
       cantidad: inventario.cantidad,

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductoTable extends Migration
+class CreateVentaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,10 +17,11 @@ class CreateProductoTable extends Migration
             $table->increments('id');
             $table->date('fecha')->default(null);
             $table->integer('cantidad')->default(0);
+            $table->string('estado')->default(null);
             $table->integer('inventario_id')->unsigned();
             $table->foreign('inventario_id')->references('id')->on('inventario')->onDelete('restrict');
-            $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('usuario')->onDelete('restrict');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
             $table->timestamps();
         });
     }

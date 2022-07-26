@@ -4,9 +4,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
-import { CategoriaService } from '../../categoria/categoria.service';
-import { TiendaService } from '../../tienda/tienda.service';
-import { UsuarioService } from '../../usuario/usuario.service';
 import { ProductoService } from '../producto.service';
 
 export function matchValidator(
@@ -32,11 +29,11 @@ export function matchValidator(
   };
 }
 @Component({
-  selector: 'app-producto-distribuir',
-  templateUrl: './producto-distribuir.component.html',
-  styleUrls: ['./producto-distribuir.component.scss']
+  selector: 'app-producto-recoger',
+  templateUrl: './producto-recoger.component.html',
+  styleUrls: ['./producto-recoger.component.scss']
 })
-export class ProductoDistribuirComponent implements OnInit{
+export class ProductoRecogerComponent implements OnInit{
   @Input() id!: any;
   @Input() permisosEntrada: any[] = [];
   @Input() tiendas: any[] = [];
@@ -45,7 +42,7 @@ export class ProductoDistribuirComponent implements OnInit{
   lodading = false;
   formGroup!: FormGroup;
   permisos: any[] = [];
-  title = "Distribuir Producto";
+  title = "Recoger Producto";
   local = true;
 
   login_user: any;
@@ -92,7 +89,7 @@ export class ProductoDistribuirComponent implements OnInit{
     this.validarForm();
     if (this.formGroup.valid) {
       this.lodading = true;
-      this.productoService.distribuirProducto({
+      this.productoService.recogerProducto({
         id: this.id,
         producto: this.formGroup.controls['producto'].value,
         tienda: this.formGroup.controls['tienda'].value,

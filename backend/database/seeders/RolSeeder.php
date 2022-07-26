@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Rol;
+
 class RolSeeder extends Seeder
 {
     /**
@@ -15,6 +16,10 @@ class RolSeeder extends Seeder
     {
         Rol::create([
             'perfil' => 'Administrador'
+        ]);
+
+        Rol::create([
+            'perfil' => 'Venta'
         ]);
     }
 }

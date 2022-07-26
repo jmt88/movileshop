@@ -2,12 +2,8 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
-import { CategoriaService } from '../../categoria/categoria.service';
-import { TiendaService } from '../../tienda/tienda.service';
-import { UsuarioService } from '../../usuario/usuario.service';
-import { ProductoService } from '../producto.service';
+import { InventarioService } from '../inventario.service';
 
 export function matchValidator(
   matchTo: string, 
@@ -32,42 +28,57 @@ export function matchValidator(
   };
 }
 @Component({
-  selector: 'app-producto-distribuir',
-  templateUrl: './producto-distribuir.component.html',
-  styleUrls: ['./producto-distribuir.component.scss']
+  selector: 'app-inventario-form',
+  templateUrl: './inventario-form.component.html',
+  styleUrls: ['./inventario-form.component.scss']
 })
-export class ProductoDistribuirComponent implements OnInit{
+export class InventarioFormComponent implements OnInit{
   @Input() id!: any;
+  @Input() precio_venta!: any;
+  @Input() existencia!: any;
   @Input() permisosEntrada: any[] = [];
-  @Input() tiendas: any[] = [];
-  @Input() producto: any[] = [];
 
   lodading = false;
   formGroup!: FormGroup;
   permisos: any[] = [];
-  title = "Distribuir Producto";
+  perfiles: any[] = [];
+  title = "Adicionar Inventario";
   local = true;
 
-  login_user: any;
+  formatterDollar = (value: number): string => `$ ${value}`;
+  parserDollar = (value: string): string => value.replace('$ ', '');
 
   constructor(private modalRef: NzModalRef, private messageService: NzMessageService, 
-    private productoService: ProductoService, private fb: FormBuilder, private authService: AuthService,
-    private errorService: ErrorService, private cdr: ChangeDetectorRef) 
-    { 
-      this.login_user = this.authService.getSessionUser();
-    }
+    private inventarioService: InventarioService, private fb: FormBuilder, 
+    private errorService: ErrorService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.crearFormulario(this.producto);
+    this.crearFormulario();
+
+      this.title = 'Ventas de la tienda'
+      this.cargarDatos(this.id);
+
+      this.cdr.detectChanges();
   }
 
+  cargarDatos(id: number) {
+    this.llenarDatosFormulario(id);
+  }
 
-  crearFormulario(producto_id: any) {
+  crearFormulario() {
     this.formGroup = this.fb.group({
-      producto: [producto_id],
-      tienda: ["", [Validators.required]],
-      cantidad: ["", [Validators.required]],
+      producto_id: [''],
+      cantidad: [0, [Validators.required]],
+      valor_total: [0],
     });
+  }
+
+  llenarDatosFormulario(id: number) {
+    this.crearFormulario();
+
+    this.formGroup.controls['producto_id'].setValue(id);
+    
+    this.cdr.detectChanges();
   }
   
   cerrarModal(status: boolean) {
@@ -84,18 +95,21 @@ export class ProductoDistribuirComponent implements OnInit{
     });
   }
 
-  salvarDatos() {
-      this.salvar()
+  salvarVenta() {
+    this.venta(this.id)
   }
 
-  salvar() {
+  venta(id: number) {
     this.validarForm();
+    if(this.formGroup.controls['cantidad'].value > this.existencia) {
+      this.messageService.error('La cantidad a vender excede la existencia del inventario');
+      this.formGroup.controls['cantidad'].setValue(0);
+      return;
+    }
     if (this.formGroup.valid) {
       this.lodading = true;
-      this.productoService.distribuirProducto({
-        id: this.id,
-        producto: this.formGroup.controls['producto'].value,
-        tienda: this.formGroup.controls['tienda'].value,
+      this.inventarioService.ventaInventario({
+        producto_id: this.formGroup.controls['producto_id'].value,
         cantidad: this.formGroup.controls['cantidad'].value,
       }).subscribe(data => {
         this.lodading = false;
@@ -118,5 +132,10 @@ export class ProductoDistribuirComponent implements OnInit{
 
   onChangePermisos(e:any []) {
     this.permisos = e;
+  }
+
+  calcularMonto() {
+    var cantidad = this.formGroup.controls['cantidad'].value;
+    this.formGroup.controls['valor_total'].setValue(this.precio_venta * cantidad);
   }
 }

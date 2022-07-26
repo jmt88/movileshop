@@ -9,6 +9,8 @@ use App\Http\Controllers\TiendaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboarController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\VentaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -68,3 +70,15 @@ Route::post('/editarProducto', [ProductoController::class, 'editarProducto'])->m
 Route::post('/eliminarProducto', [ProductoController::class, 'eliminarProducto'])->middleware('auth:api');
 Route::post('/listarInformacionRequerida', [ProductoController::class, 'listarInformacionRequerida'])->middleware('auth:api');
 
+//Distribuir Productos por tiendas
+Route::post('/distribuirProductos', [ProductoController::class, 'distribuirProductos'])->middleware('auth:api');
+Route::post('/recogerProductos', [ProductoController::class, 'recogerProductos'])->middleware('auth:api');
+
+
+//Inventario por tienda
+Route::post('/listarInventarios', [InventarioController::class, 'listarInventarios'])->middleware('auth:api');
+Route::post('/ventaInventario', [InventarioController::class, 'ventaInventario'])->middleware('auth:api');
+
+//Ventas por tienda
+Route::post('/listarVentas', [VentaController::class, 'listarVentas'])->middleware('auth:api');
+Route::post('/cancelarVenta', [VentaController::class, 'cancelarVenta'])->middleware('auth:api');

@@ -18,7 +18,7 @@ class PermisosRolSeeder extends Seeder
         $views = Views::all();
         foreach ($views as $view) {
             PermisoRol::create([
-               'views_id' => $view->id,
+                'views_id' => $view->id,
                 'rol_id' => 1,
                 'ver' => 1,
                 'crear' => 1,
@@ -26,5 +26,22 @@ class PermisosRolSeeder extends Seeder
                 'eliminar' => 1,
             ]);
         }
+        PermisoRol::create([
+            'views_id' => 6,
+            'rol_id' => 2,
+            'ver' => 1,
+            'crear' => 1,
+            'modificar' => 1,
+            'eliminar' => 1,
+        ]);
+
+        PermisoRol::create([
+            'views_id' => 7,
+            'rol_id' => 2,
+            'ver' => 1,
+            'crear' => 1,
+            'modificar' => 1,
+            'eliminar' => 1,
+        ]);
     }
 }

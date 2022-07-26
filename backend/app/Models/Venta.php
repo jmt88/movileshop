@@ -13,6 +13,7 @@ class Venta extends Model
     protected $fillable = [
         'fecha',
         'cantidad',
+        'estado',
         'inventario_id',
         'usuario_id'
     ];

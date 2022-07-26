@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
 import { ProductoDistribuirComponent } from '../producto-distribuir/producto-distribuir.component';
 import { ProductoFormComponent } from '../producto-form/producto-form.component';
+import { ProductoRecogerComponent } from '../producto-recoger/producto-recoger.component';
 import { ProductoService } from '../producto.service';
 
 @Component({
@@ -200,12 +201,30 @@ export class ProductoComponent implements OnInit {
     modal.afterClose.subscribe(data => {
       if(data.data) {
         this.listarProductos();
-        
       }
     });
   }
   
   recoger(producto_id: any) {
-
+    const modal = this.modal.create({
+      nzContent: ProductoRecogerComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzKeyboard: false,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzCentered: true,
+      nzFooter: null,
+      nzWidth: '35%',
+      nzComponentParams: {
+        producto: producto_id,
+        tiendas: this.tiendas,
+        permisosEntrada: this.rutas
+      },
+    });
+    modal.afterClose.subscribe(data => {
+      if(data.data) {
+        this.listarProductos();
+      }
+    });
   }
 }

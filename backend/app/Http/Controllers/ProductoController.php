@@ -67,4 +67,23 @@ class ProductoController extends Controller
         }
     }
 
+    public function distribuirProductos(Request $request)
+    {
+        try {
+            return response()->json($this->productoService->DistribuirProductos($request), 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
+        }
+    }
+
+    public function recogerProductos(Request $request)
+    {
+        try {
+            return response()->json($this->productoService->RecogerProductos($request), 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
+        }
+    }
+
+
 }

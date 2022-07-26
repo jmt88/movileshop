@@ -1,0 +1,45 @@
+<nz-card [nzBordered]="false" nzTitle="Administrar Inventario de la Tienda">
+    <div nz-row>
+        <div nz-col nzSpan="24">
+            <div class="send-request" style="margin-top: 55px">
+                <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="inventarios" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
+                    <thead>
+                        <tr>
+                            <th id="codigo" nzColumnKey="codigo" [nzSortFn]="true">Código</th>
+                            <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Nombre</th>
+                            <th id="categoria" nzColumnKey="categoria" [nzSortFn]="true">Categoría</th>
+                            <th id="precio_venta" nzColumnKey="precio_venta" [nzSortFn]="true">Precio de Venta</th>
+                            <th id="cantidad" nzColumnKey="cantidad" [nzSortFn]="true">Cantidad</th>
+                            <th id="existencia" nzColumnKey="existencia" [nzSortFn]="true">Existencia</th>
+                            <th id="acciones" class="action-table-buttons" nzWidth="150px"> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <nz-input-group [nzSuffix]="suffixIconSearch">
+                                    <input nz-input type="text" [(ngModel)]="codigo" (change)="buscar($event)">
+                                </nz-input-group>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let data of rowSelectionTable.data">
+                            <td>{{ data.codigo }}</td>
+                            <td>{{ data.nombre }}</td>
+                            <td>{{ data.categoria }}</td>
+                            <td>{{ data.precio_venta }}</td>
+                            <td>{{ data.cantidad }}</td>
+                            <td>{{ data.existencia }}</td>
+                            <td class="action-table-buttons">
+                                <button nz-button title="Ventas" nzSize="small" (click)="ventas(data)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="dollar"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</nz-card>
+
+<ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+</ng-template>

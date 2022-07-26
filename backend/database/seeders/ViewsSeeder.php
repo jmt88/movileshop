@@ -51,5 +51,19 @@ class ViewsSeeder extends Seeder
             'link' => '/productos'
         ]);
 
+        Views::create([
+            'nombre' => 'Inventarios',
+            'grupo' => 2,
+            'descripcion' => 'Administrar inventarios de la tienda',
+            'link' => '/inventarios'
+        ]);
+
+        Views::create([
+            'nombre' => 'Ventas',
+            'grupo' => 2,
+            'descripcion' => 'Administrar ventas de la tienda',
+            'link' => '/ventas'
+        ]);
+
     }
 }

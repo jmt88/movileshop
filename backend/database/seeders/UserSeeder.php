@@ -24,5 +24,14 @@ class UserSeeder extends Seeder
             'email' => 'admin@tienda.cu',
             'password' => Hash::make('admin')
         ]);
+
+        User::create([
+            'nombre' => 'Usuario de Ventas del sistema',
+            'username' => 'venta',
+            'rol_id' => 2,
+            'tienda_id' => 1,
+            'email' => 'venta@tienda.cu',
+            'password' => Hash::make('venta')
+        ]);
     }
 }

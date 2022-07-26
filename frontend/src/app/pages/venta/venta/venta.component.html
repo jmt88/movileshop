@@ -1,0 +1,45 @@
+<nz-card [nzBordered]="false" nzTitle="Administrar Ventas de la Tienda">
+    <div nz-row>
+        <div nz-col nzSpan="24">
+            <div class="send-request" style="margin-top: 55px">
+                <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="ventas" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
+                    <thead>
+                        <tr>
+                            <th id="fecha" nzColumnKey="codigo" [nzSortFn]="true">Fecha</th>
+                            <th id="codigo" nzColumnKey="codigo" [nzSortFn]="true">Código</th>
+                            <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Nombre</th>
+                            <th id="categoria" nzColumnKey="categoria" [nzSortFn]="true">Categoría</th>
+                            <th id="cantidad" nzColumnKey="cantidad" [nzSortFn]="true">Cantidad</th>
+                            <th id="estado" nzColumnKey="estado" [nzSortFn]="true">Estado</th>
+                            <th id="acciones" class="action-table-buttons" nzWidth="150px"> Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <nz-input-group [nzSuffix]="suffixIconSearch">
+                                    <input nz-input type="text" [(ngModel)]="codigo" (change)="buscar($event)">
+                                </nz-input-group>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let data of rowSelectionTable.data">
+                            <td>{{ data.fecha }}</td>
+                            <td>{{ data.codigo }}</td>
+                            <td>{{ data.nombre }}</td>
+                            <td>{{ data.categoria }}</td>
+                            <td>{{ data.cantidad }}</td>
+                            <td>{{ data.estado ? 'Si' : 'No' }}</td>
+                            <td class="action-table-buttons">
+                                <button nz-button title="Cancelar venta" nzSize="small" (click)="cancelarVenta(data.id)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+</nz-card>
+
+<ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+</ng-template>

@@ -1,0 +1,36 @@
+<nz-spin [nzSpinning]="lodading">
+    <nz-card [nzBordered]="false" [nzTitle]="title" [nzExtra]="buttonsTemplate">
+
+        <form nz-form [formGroup]="formGroup" nzLayout="vertical">
+            <div nz-col nzSpan="24">
+                <nz-input-number hidden formControlName="producto_id"></nz-input-number>
+
+                <nz-form-item>
+                    <nz-form-label nzRequired nzFor="cantidad">Cantidad</nz-form-label>
+                    <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                        <nz-input-number style="width: 100%" [nzStep]="1" formControlName="cantidad" (change)='calcularMonto()'></nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label nzRequired nzFor="valor_total">Valor total</nz-form-label>
+                    <nz-form-control nzErrorTip="El campo no puede estar vacío!">
+                        <nz-input-number style="width: 100%" [nzStep]="1" [nzFormatter]="formatterDollar" [nzParser]="parserDollar" formControlName="valor_total" nzDisabled></nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </form>
+    </nz-card>
+</nz-spin>
+<ng-template #buttonsTemplate>
+    <div class="steps-action">
+        <button nz-button nzType="primary" (click)="salvarVenta()" style="background-color: rgb(20, 168, 64); border-color: white;">
+        <i nz-icon nzType="save"></i><span>Guardar</span>
+    </button>
+        <button nz-button nzType="default" (click)="cerrarModal(false)">
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Cancelar
+
+        </button>
+
+    </div>

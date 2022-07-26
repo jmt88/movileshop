@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Models\Categoria;
+use App\Models\Inventario;
 use App\Models\Rol;
 use App\Models\Tienda;
 use App\Models\Views;
@@ -178,5 +179,57 @@ class ProductoService extends BaseService
             return ["success"=>true, "message"=> "La operación se realizó correctamente"];
         }
         return ["success"=>false, "message"=> "El producto proporcionado no existe"];
+    }
+
+    public function DistribuirProductos($request)
+    {
+        $producto = Producto::find($request->get('producto'));
+
+        if($producto->existencia < $request->get('cantidad')) {
+            return ['success' => false, 'message' => 'No es posible realizar la operación, la cantidad a distribuir excede a la cantidad existente'];
+        }
+
+        $entity = Inventario::where('tienda_id', $request->get('tienda'))->where('producto_id', $request->get('producto'))->first();
+        if(is_null($entity)) {
+            $entity = new Inventario();
+
+            $entity->cantidad += $request->get('cantidad');
+            $entity->existencia += $request->get('cantidad');
+            $entity->tienda_id = $request->get('tienda');
+            $entity->producto_id = $request->get('producto');
+            $entity->save();
+        } else {
+            $entity->cantidad += $request->get('cantidad');
+            $entity->existencia += $request->get('cantidad');
+            $entity->tienda_id = $request->get('tienda');
+            $entity->producto_id = $request->get('producto');
+            $entity->save();
+        }
+
+        $producto->existencia -= $request->get('cantidad');
+        $producto->save();
+
+        return ['success' => true, 'message' => 'La operación se realizó correctamente'];
+    }
+
+    public function RecogerProductos($request)
+    {
+        $entity = Inventario::where('tienda_id', $request->get('tienda'))->where('producto_id', $request->get('producto'))->first();
+
+        if ($entity != null) {
+            if($request->get('cantidad') > $entity->cantidad) {
+                return ['success' => false, 'message' => 'No es posible realizar la operación, la cantidad a retirar excede a la cantidad existente'];
+            }
+            $entity->cantidad -= $request->get('cantidad');
+            $entity->existencia -= $request->get('cantidad');
+            $entity->save();
+
+            $producto = Producto::find($request->get('producto'));
+            $producto->existencia += $request->get('cantidad');
+            $producto->save();
+
+            return ['success' => true, 'message' => 'La operación se realizó correctamente'];
+        }
+        return ['success' => false, 'message' => 'El inventario solicitado no se encuentra registrado en el sistema'];
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Rol;
 use App\Models\Tienda;
+use App\Models\Venta;
 use App\Models\Views;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -28,11 +29,13 @@ class InventarioService extends BaseService
         $page = $request->get('page');
         $pageSize = $request->get('pageSize');
 
+        $user = $this->getDatosUsuario();
+
         $query = Inventario::query();
 
         $query->orderBy($orderKey, $orderValue);
         foreach ($searchKey as $item) {
-            $query->where($item->key, 'like', "%$item->value%");
+            $query->where($item->key, 'like', "%$item->value%")->where('tienda_id', $user['tienda_id']);
         }
         $total = $query->count();
 
@@ -46,68 +49,57 @@ class InventarioService extends BaseService
         foreach ($inventarios as $inventario) {
             $resultado [] = [
                 'id' => $inventario->id,
-                'tienda' => $inventario->tienda,
-                'producto' => $inventario->producto,
+                'producto_id' => $inventario->producto->id,
+                'tienda' => $inventario->tienda->nombre,
+                'codigo' => $inventario->producto->codigo,
+                'nombre' => $inventario->producto->nombre,
+                'descripcion' => $inventario->producto->descripcion,
+                'precio_venta' => $inventario->producto->precio_venta,
+                'precio_compra' => $inventario->producto->precio_compra,
+                'categoria' => $inventario->producto->categoria->nombre,
                 'cantidad' => $inventario->cantidad,
-                'existencia' => $inventario->existencia
+                'existencia' => $inventario->existencia,
+                'estado' => $inventario->producto->estado,
             ];
         }
         return ["success" => true, "inventarios" => $resultado, 'pagination' => $pagination];
     }
 
-    public function CargarDatos($id)
+    public function VentaInventario($request)
     {
-        $entity = Inventario::findOrFail($id);
+        $producto = Producto::find($request->get('producto_id'));
+        $producto_id = $request->get('producto_id');
+        $cantidad = $request->get('cantidad');
 
-        $resultado = array();
-        $array_resultado = array();
-        if ($entity != null) {
+        $user = $this->getDatosUsuario();
 
-            $resultado ['id'] = $entity->id;
-            $resultado ['tienda'] = $entity->tienda;
-            $resultado ['producto'] = $entity->producto;
-            $resultado ['cantidad'] = $entity->cantidad;
-            $resultado ['existencia'] = $entity->existencia;
-
-            $array_resultado['success'] = true;
-            $array_resultado['inventario'] = $resultado;
-
-        } else {
-            $array_resultado['success'] = false;
-            $array_resultado['message'] = 'No se pudo encontrar el inventario solicitado';
+        if($producto->existencia < $cantidad) {
+            return ['success' => false, 'message' => 'No es posible realizar la operación, la cantidad a distribuir excede a la cantidad existente'];
         }
-        return $array_resultado;
-    }
 
-    public function SalvarInventario($request)
-    {
-        $entity = Inventario::where('tienda', $request->get('tienda'))->and('producto', $request->get('producto'))->get();
-        if(isEmpty($entity))
-            $entity = new Inventario();
+        $entity = Inventario::where('tienda_id', $user['tienda_id'])->where('producto_id', $producto_id)->first();
+        if(!is_null($entity)) {
+            $entity_venta = new Venta();
 
-        $entity->cantidad += $request->get('cantidad');
-        $entity->existencia += $request->get('existencia');
-        $entity->tienda = $request->get('tienda');
-        $entity->producto = $request->get('producto');
-        $entity->save();
+            $entity_venta->fecha = new \DateTime();
+            $entity_venta->cantidad = $cantidad;
+
+            $entity_venta->inventario_id = $entity->id;
+            $entity_venta->user_id = $user['id'];
+            $entity_venta->estado = 'En Proceso';
+
+            $entity_venta->save();
+
+            $entity->existencia -= $cantidad;
+            $entity->save();
+        } else {
+            return ['success' => false, 'message' => 'El registro no fue encontrado'];
+
+        }
+
+        $producto->existencia -= $request->get('cantidad');
+        $producto->save();
 
         return ['success' => true, 'message' => 'La operación se realizó correctamente'];
-    }
-
-    public function EditarInventario($request)
-    {
-        $entity = Inventario::where('tienda', $request->get('tienda'))->and('producto', $request->get('producto'))->get();
-
-        if ($entity != null) {
-            if($request->get('cantidad') >= $entity->cantidad) {
-                return ['success' => false, 'message' => 'No es posible realizar la opreción, la cantidad a retirar excede a la cantidad existente'];
-            }
-            $entity->cantidad -= $request->get('cantidad');
-            $entity->existencia -= $request->get('cantidad');
-            $entity->save();
-
-            return ['success' => true, 'message' => 'La operación se realizó correctamente'];
-        }
-        return ['success' => false, 'message' => 'El inventario solicitado no se encuentra registrado en el sistema'];
     }
 }
