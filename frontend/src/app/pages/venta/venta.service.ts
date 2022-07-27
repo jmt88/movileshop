@@ -29,5 +29,17 @@ export class VentaService {
       id: id,
     });
   }
+ 
+  aprobarVenta(id: number) {
+    return this.http.post<any>(`${this.apiUrl}/aprobarVenta`, {
+      id: id,
+    });
+  }
+  
+  eliminarVenta(id: number) {
+    return this.http.post<any>(`${this.apiUrl}/eliminarVenta`, {
+      id: id,
+    });
+  }
 
 }

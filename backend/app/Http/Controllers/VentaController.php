@@ -23,10 +23,28 @@ class VentaController extends Controller
         }
     }
 
-    public function ventaVenta(Request $request)
+    public function cancelarVenta(Request $request)
     {
         try {
-            return response()->json($this->ventaService->VentaVenta($request), 200);
+            return response()->json($this->ventaService->CancelarVenta($request), 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
+        }
+    }
+
+    public function aprobarVenta(Request $request)
+    {
+        try {
+            return response()->json($this->ventaService->AprobarVenta($request), 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
+        }
+    }
+
+    public function eliminarVenta(Request $request)
+    {
+        try {
+            return response()->json($this->ventaService->EliminarVenta($request), 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
         }

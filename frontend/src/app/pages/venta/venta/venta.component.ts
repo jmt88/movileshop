@@ -41,7 +41,6 @@ export class VentaComponent implements OnInit {
         this.permisos = this.authService.canexecute('/ventas');
   }
   
-  
   ventas: any[] = [];
   ngOnInit(): void {
     this.isLoading=true;
@@ -90,6 +89,62 @@ export class VentaComponent implements OnInit {
       }
     });
  }
+  
+ aprobarVenta(id: number) {
+    this.mostrarModalAprobarVenta(id);
+  }
+
+  mostrarModalAprobarVenta(id:number) {
+    this.modal.confirm({
+      nzTitle: 'Aprobar Venta',
+      nzContent: 'Está seguro que desea aprobar la venta seleccionada?',
+      nzOkText: 'Aceptar',
+      nzCancelText: 'Cancelar',
+      nzOkDanger: true,
+      nzOnOk: () => { this.aprobar(id)}
+    })
+  }
+
+  aprobar(id: number) {
+    this.isLoading = true;
+    this.ventaService.aprobarVenta(id).subscribe(data=> {
+      this.isLoading = false;
+      if(data.success) {
+        this.listarVentas();
+        this.messageService.success(data.message);
+      }else {
+        this.messageService.error(data.message);
+      }
+    });
+ }
+
+ mostrarModalEliminar(id:number) {
+  this.modal.confirm({
+    nzTitle: 'Eliminar Elemento',
+    nzContent: '¿Está seguro que desea eliminar el elemento ?',
+    nzOkText: 'Eliminar',
+    nzCancelText: 'Cancelar',
+    nzOkDanger: true,
+    nzOnOk: () => { this.eliminar(id)}
+  })
+}
+
+eliminarVenta(id: number) {
+  this.mostrarModalEliminar(id);
+}
+
+eliminar(id: number) {
+   this.isLoading = true;
+   this.ventaService.eliminarVenta(id).subscribe(data=> {
+     this.isLoading = false;
+     if(data.success) {
+       this.listarVentas();
+       this.messageService.success(data.message);
+     }else {
+       this.messageService.error(data.message);
+     }
+   });
+}
 
   onQueryParamsChange(params: NzTableQueryParams) {
     const { pageSize, pageIndex, sort } = params;

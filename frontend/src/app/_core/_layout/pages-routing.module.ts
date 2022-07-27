@@ -74,6 +74,12 @@ export const routes: Routes = [
         canActivate: [LoginGuard],
         loadChildren: () =>
           import('./../../pages/inventario/inventario.module').then((m) => m.InventarioModule)
+      },
+      {
+        path: 'ventas',
+        canActivate: [LoginGuard],
+        loadChildren: () =>
+          import('./../../pages/venta/venta.module').then((m) => m.VentaModule)
       }
     ]
   }

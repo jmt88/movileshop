@@ -82,3 +82,5 @@ Route::post('/ventaInventario', [InventarioController::class, 'ventaInventario']
 //Ventas por tienda
 Route::post('/listarVentas', [VentaController::class, 'listarVentas'])->middleware('auth:api');
 Route::post('/cancelarVenta', [VentaController::class, 'cancelarVenta'])->middleware('auth:api');
+Route::post('/aprobarVenta', [VentaController::class, 'aprobarVenta'])->middleware('auth:api');
+Route::post('/eliminarVenta', [VentaController::class, 'eliminarVenta'])->middleware('auth:api');

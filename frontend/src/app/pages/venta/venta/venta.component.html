@@ -11,11 +11,13 @@
                             <th id="categoria" nzColumnKey="categoria" [nzSortFn]="true">Categoría</th>
                             <th id="cantidad" nzColumnKey="cantidad" [nzSortFn]="true">Cantidad</th>
                             <th id="estado" nzColumnKey="estado" [nzSortFn]="true">Estado</th>
-                            <th id="acciones" class="action-table-buttons" nzWidth="150px"> Acciones</th>
+                            <th id="acciones" class="action-table-buttons" nzWidth="200px"> Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>
+                            </td>
                             <td>
                                 <nz-input-group [nzSuffix]="suffixIconSearch">
                                     <input nz-input type="text" [(ngModel)]="codigo" (change)="buscar($event)">
@@ -28,9 +30,11 @@
                             <td>{{ data.nombre }}</td>
                             <td>{{ data.categoria }}</td>
                             <td>{{ data.cantidad }}</td>
-                            <td>{{ data.estado ? 'Si' : 'No' }}</td>
+                            <td>{{ data.estado }}</td>
                             <td class="action-table-buttons">
-                                <button nz-button title="Cancelar venta" nzSize="small" (click)="cancelarVenta(data.id)" *ngIf="permisos.modificar" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                                <button nz-button title="Aprobar venta" nzSize="small" (click)="aprobarVenta(data.id)" *ngIf="permisos.crear && data.estado != 'Cancelada'" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                                <button nz-button title="Cancelar venta" nzSize="small" (click)="cancelarVenta(data.id)" *ngIf="permisos.crear && data.estado != 'Pagado'" nzType="primary" class="warning" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                                <button nz-button title="Eliminar venta" nzSize="small" (click)="eliminarVenta(data.id)" *ngIf="permisos.eliminar" nzType="primary" class="danger" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
                             </td>
                         </tr>
                     </tbody>
