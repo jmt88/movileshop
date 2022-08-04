@@ -23,6 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { TiendaService } from '../tienda/tienda.service';
 const routes: Routes = [{
   path: '',
   component: InventarioComponent
@@ -58,6 +59,6 @@ const routes: Routes = [{
     FormsModule,
     ReactiveFormsModule
   ],
-  providers:[InventarioService, ErrorService, AuthService,NzModalService]
+  providers:[InventarioService, ErrorService, AuthService,NzModalService, TiendaService]
 })
 export class InventarioModule { }

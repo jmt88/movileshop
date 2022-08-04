@@ -1,10 +1,52 @@
 <nz-card [nzBordered]="false" nzTitle="Administrar Ventas de la Tienda">
     <div nz-row>
         <div nz-col nzSpan="24">
-            <div class="send-request" style="margin-top: 55px">
+            <form nz-form [formGroup]="formGroup" nzLayout="vertical">
+                <div nz-row>
+                    <div nz-col nzSpan="3"></div>
+                    <div nz-col nzSpan="5">
+                        <nz-form-item>
+                            <nz-select nzPlaceHolder="Tienda" nzShowSearch nzAllowClear formControlName="tienda_id" *ngIf="login_user.perfil_id == 1">
+                                <nz-option [nzValue]="item.id" [nzLabel]="item.nombre" *ngFor="let item of tiendas" nzAllowClear></nz-option>
+                            </nz-select>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="5" style="margin-left: 10px">
+                        <nz-form-item>
+                            <nz-select nzPlaceHolder="Producto" nzShowSearch nzAllowClear formControlName="producto_id">
+                                <nz-option [nzValue]="item.id" [nzLabel]="item.nombre" *ngFor="let item of productos" nzAllowClear></nz-option>
+                            </nz-select>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="4" style="margin-left: 10px">
+                        <nz-form-item>
+                            <nz-date-picker formControlName="fecha_inicial" nzPlaceHolder='Fecha Inicial'></nz-date-picker>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="4" style="margin-left: 10px">
+                        <nz-form-item>
+                            <nz-date-picker formControlName="fecha_final" nzPlaceHolder='Fecha Final'></nz-date-picker>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="2" style="margin-left: 10px">
+                        <nz-form-item>
+                            <button nz-button nzType="primary" (click)="buscar('')">
+                                            <i nz-icon nzType="search"></i>
+                                            Buscar
+                                          </button>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div nz-col nzSpan="24">
+            <div class="send-request">
                 <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="ventas" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
                     <thead>
                         <tr>
+                            <th id="tienda" nzColumnKey="tienda" [nzSortFn]="true" *ngIf="login_user.perfil_id == 1">Tienda</th>
                             <th id="fecha" nzColumnKey="codigo" [nzSortFn]="true">Fecha</th>
                             <th id="codigo" nzColumnKey="codigo" [nzSortFn]="true">Código</th>
                             <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Nombre</th>
@@ -15,16 +57,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                            </td>
-                            <td>
-                                <nz-input-group [nzSuffix]="suffixIconSearch">
-                                    <input nz-input type="text" [(ngModel)]="codigo" (change)="buscar($event)">
-                                </nz-input-group>
-                            </td>
-                        </tr>
                         <tr *ngFor="let data of rowSelectionTable.data">
+                            <td *ngIf="login_user.perfil_id == 1">{{ data.tienda }}</td>
                             <td>{{ data.fecha }}</td>
                             <td>{{ data.codigo }}</td>
                             <td>{{ data.nombre }}</td>
@@ -32,8 +66,8 @@
                             <td>{{ data.cantidad }}</td>
                             <td>{{ data.estado }}</td>
                             <td class="action-table-buttons">
-                                <button nz-button title="Aprobar venta" nzSize="small" (click)="aprobarVenta(data.id)" *ngIf="permisos.crear && data.estado != 'Cancelada'" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
-                                <button nz-button title="Cancelar venta" nzSize="small" (click)="cancelarVenta(data.id)" *ngIf="permisos.crear && data.estado != 'Pagado'" nzType="primary" class="warning" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
+                                <button nz-button title="Aprobar venta" nzSize="small" (click)="aprobarVenta(data.id)" *ngIf="permisos.crear && data.estado == 'En Proceso'" nzType="primary" class="success" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="check"></i></button>
+                                <button nz-button title="Cancelar venta" nzSize="small" (click)="cancelarVenta(data.id)" *ngIf="permisos.crear && data.estado == 'En Proceso'" nzType="primary" class="warning" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="close"></i></button>
                                 <button nz-button title="Eliminar venta" nzSize="small" (click)="eliminarVenta(data.id)" *ngIf="permisos.eliminar" nzType="primary" class="danger" style="margin-right: 8px;" nzShape="round"><i nz-icon nzType="delete"></i></button>
                             </td>
                         </tr>

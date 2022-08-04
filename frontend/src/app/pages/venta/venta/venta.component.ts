@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, ViewContainerRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
+import { ProductoService } from '../../producto/producto.service';
+import { TiendaService } from '../../tienda/tienda.service';
 import { VentaService } from '../venta.service';
 
 @Component({
@@ -31,21 +34,52 @@ export class VentaComponent implements OnInit {
   searchKey: any[] = [];
   
   codigo = "";
+  login_user: any;
 
   searchValue: any= "";
+  tiendas: any [] = [];
+  productos: any [] = [];
 
+  tienda_id = "";
+  producto_id = "";
+  fecha_inicial = "";
+  fecha_final = "";
+  formGroup!: FormGroup;
   
-  constructor(private authService: AuthService, private ventaService: VentaService, 
-    private errorService: ErrorService, private modal: NzModalService, 
+  constructor(private authService: AuthService, private ventaService: VentaService, private productoService: ProductoService,
+    private errorService: ErrorService, private modal: NzModalService, private fb: FormBuilder, private tiendaService: TiendaService,
     private viewContainerRef: ViewContainerRef, private cdr: ChangeDetectorRef, private messageService: NzMessageService) {
         this.permisos = this.authService.canexecute('/ventas');
+        this.login_user = this.authService.getSessionUser();
   }
   
   ventas: any[] = [];
   ngOnInit(): void {
     this.isLoading=true;
     this.listarVentas();
+    this.listarVentas();
+   this.tiendaService.listarTodosTiendas().subscribe(data => {
+     if(data.success) {
+       this.tiendas = data.tiendas;
+     }
+   })
+   this.productoService.listarTodosProductos().subscribe(data => {
+     if(data.success) {
+       this.productos = data.productos;
+     }
+   })
+    this.crearFormulario();
   }
+
+  crearFormulario() {
+    this.formGroup = this.fb.group({
+      tienda_id: [''],
+      producto_id: [''],
+      fecha_inicial: [''],
+      fecha_final: [''],
+    });
+  }
+
 
   listarVentas() {
       this.isLoading = true;
@@ -175,6 +209,46 @@ eliminar(id: number) {
         {
           key: 'codigo',
           value: this.codigo
+        },
+      );
+    }
+
+    this.tienda_id = this.formGroup.controls['tienda_id'].value;
+    if(this.tienda_id != "" && this.tienda_id != null) {
+      this.searchKey.push(
+        {
+          key: 'tienda_id',
+          value: this.tienda_id
+        },
+      );
+    }
+    
+    this.producto_id = this.formGroup.controls['producto_id'].value;
+    if(this.producto_id != "" && this.producto_id != null) {
+      this.searchKey.push(
+        {
+          key: 'producto_id',
+          value: this.producto_id
+        },
+      );
+    }
+    
+    this.fecha_inicial = this.formGroup.controls['fecha_inicial'].value;
+    if(this.fecha_inicial != "" && this.fecha_inicial != null) {
+      this.searchKey.push(
+        {
+          key: 'fecha_inicial',
+          value: this.fecha_inicial
+        },
+      );
+    }
+
+    this.fecha_final = this.formGroup.controls['fecha_final'].value;
+    if(this.fecha_final != "" && this.fecha_final != null) {
+      this.searchKey.push(
+        {
+          key: 'fecha_final',
+          value: this.fecha_final
         },
       );
     }

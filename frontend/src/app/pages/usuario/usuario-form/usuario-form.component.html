@@ -72,19 +72,17 @@
                                             <ng-container *ngIf="control.hasError('email') && !control.hasError('required')">Debe introducir una dirección válida!</ng-container>
                                         </ng-template>
                                     </nz-form-item>
+                                </div>
+                                <div nz-col nzSpan="11">
                                     <nz-form-item>
-                                        <nz-form-label nzRequired nzFor="navegacion">Datos navegación</nz-form-label>
+                                        <nz-form-label nzRequired nzFor="nombre">
+                                            Tienda
+                                        </nz-form-label>
                                         <nz-form-control nzErrorTip="El campo no puede estar vacío!">
-                                            <label nz-checkbox formControlName="navegacion">¿Navegación?</label>
-                                            <nz-switch formControlName="internet" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate" *ngIf="formGroup.controls['navegacion'].value"></nz-switch>
+                                            <nz-select formControlName="tienda">
+                                                <nz-option [nzValue]="item.id" [nzLabel]="item.nombre" *ngFor="let item of tiendas"></nz-option>
+                                            </nz-select>
                                         </nz-form-control>
-                                    </nz-form-item>
-                                    <nz-form-item *ngIf="formGroup.controls['navegacion'].value">
-                                        <nz-form-label nzRequired nzFor="cuota">Cuota</nz-form-label>
-                                        <nz-form-control nzErrorTip="El campo no puede estar vacío!">
-                                            <input type="number" nz-input formControlName="cuota" />
-                                        </nz-form-control>
-
                                     </nz-form-item>
                                 </div>
                             </div>

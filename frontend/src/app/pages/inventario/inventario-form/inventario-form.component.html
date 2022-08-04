@@ -15,7 +15,7 @@
                 <nz-form-item>
                     <nz-form-label nzRequired nzFor="valor_total">Valor total</nz-form-label>
                     <nz-form-control nzErrorTip="El campo no puede estar vacío!">
-                        <nz-input-number style="width: 100%" [nzStep]="1" [nzFormatter]="formatterDollar" [nzParser]="parserDollar" formControlName="valor_total" nzDisabled></nz-input-number>
+                        <input type="text" nz-input formControlName="valor_total" readonly />
                     </nz-form-control>
                 </nz-form-item>
             </div>

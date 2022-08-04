@@ -1,12 +1,44 @@
 <nz-card [nzBordered]="false" nzTitle="Administrar Inventario de la Tienda">
     <div nz-row>
         <div nz-col nzSpan="24">
-            <div class="send-request" style="margin-top: 55px">
+            <form nz-form [formGroup]="formGroup" nzLayout="vertical">
+                <div nz-row>
+                    <div nz-col nzSpan="11"></div>
+                    <div nz-col nzSpan="5">
+                        <nz-form-item>
+                            <nz-select nzPlaceHolder="Tienda" nzShowSearch nzAllowClear formControlName="tienda_id" *ngIf="login_user.perfil_id == 1">
+                                <nz-option [nzValue]="item.id" [nzLabel]="item.nombre" *ngFor="let item of tiendas" nzAllowClear></nz-option>
+                            </nz-select>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="5" style="margin-left: 10px">
+                        <nz-form-item>
+                            <nz-select nzPlaceHolder="Producto" nzShowSearch nzAllowClear formControlName="producto_id">
+                                <nz-option [nzValue]="item.id" [nzLabel]="item.nombre" *ngFor="let item of productos" nzAllowClear></nz-option>
+                            </nz-select>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="2" style="margin-left: 10px">
+                        <nz-form-item>
+                            <button nz-button nzType="primary" (click)="buscar('')">
+                                <i nz-icon nzType="search"></i>
+                                Buscar
+                            </button>
+                        </nz-form-item>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <div nz-col nzSpan="24">
+            <div class="send-request">
                 <nz-table #rowSelectionTable nzSize="middle" nzShowPagination nzShowSizeChanger [nzData]="inventarios" [nzLoading]="isLoading" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)">
                     <thead>
                         <tr>
+                            <th id="tienda" nzColumnKey="tienda" [nzSortFn]="true" *ngIf="login_user.perfil_id == 1">Tienda</th>
                             <th id="codigo" nzColumnKey="codigo" [nzSortFn]="true">Código</th>
-                            <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Nombre</th>
+                            <th id="nombre" nzColumnKey="nombre" [nzSortFn]="true">Producto</th>
                             <th id="categoria" nzColumnKey="categoria" [nzSortFn]="true">Categoría</th>
                             <th id="precio_venta" nzColumnKey="precio_venta" [nzSortFn]="true">Precio de Venta</th>
                             <th id="cantidad" nzColumnKey="cantidad" [nzSortFn]="true">Cantidad</th>
@@ -15,14 +47,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <nz-input-group [nzSuffix]="suffixIconSearch">
-                                    <input nz-input type="text" [(ngModel)]="codigo" (change)="buscar($event)">
-                                </nz-input-group>
-                            </td>
-                        </tr>
                         <tr *ngFor="let data of rowSelectionTable.data">
+                            <td *ngIf="login_user.perfil_id == 1">{{ data.tienda }}</td>
                             <td>{{ data.codigo }}</td>
                             <td>{{ data.nombre }}</td>
                             <td>{{ data.categoria }}</td>

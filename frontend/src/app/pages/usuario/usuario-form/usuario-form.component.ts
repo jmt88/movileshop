@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
+import { PerfilService } from '../../perfil/perfil.service';
 import { UsuarioService } from '../usuario.service';
 
 export function matchValidator(
@@ -34,6 +35,7 @@ export function matchValidator(
 })
 export class UsuarioFormComponent implements OnInit{
   @Input() id!: any;
+  @Input() tiendas: any[] = [];
   @Input() permisosEntrada: any[] = [];
 
   lodading = false;
@@ -45,9 +47,12 @@ export class UsuarioFormComponent implements OnInit{
 
   constructor(private modalRef: NzModalRef, private messageService: NzMessageService, 
     private usuarioService: UsuarioService, private fb: FormBuilder, 
-    private errorService: ErrorService, private cdr: ChangeDetectorRef) { }
+    private errorService: ErrorService, private cdr: ChangeDetectorRef, private perfilService: PerfilService) { }
 
   ngOnInit(): void {
+    this.perfilService.listarTodosPerfiles().subscribe(data=>{
+      console.log(data)
+    });
     this.crearFormulario();
     if (this.id) {
       this.title = 'Editar Usuario'
@@ -56,6 +61,8 @@ export class UsuarioFormComponent implements OnInit{
       this.title = 'Adicionar Usuario'
       this.permisos = this.permisosEntrada;
     }
+
+    
     this.cdr.detectChanges();
 
   }
@@ -76,19 +83,7 @@ export class UsuarioFormComponent implements OnInit{
   }
 
   crearFormulario() {
-    if(!this.local) {
-    this.formGroup = this.fb.group({
-      nombre: [{value: "", disabled: true}, [Validators.required]],
-      username: [{value: "", disabled: true}, [Validators.required]],
-      email: [{value: "", disabled: true}, [Validators.required, Validators.email]],
-      perfil: [null, [Validators.required]],
-      password: [{value: "", disabled: true}, []],
-      passwordTwo: [{value: "", disabled: true}, [matchValidator('password')]],
-      cuota: [0,],
-      navegacion: [false,],
-      internet: [false,],
-    });
-  }else {
+    
     this.formGroup = this.fb.group({
       nombre: ["", [Validators.required]],
       username: ["", [Validators.required]],
@@ -96,11 +91,9 @@ export class UsuarioFormComponent implements OnInit{
       perfil: [null, [Validators.required]],
       password: ["", []],
       passwordTwo: ["", [matchValidator('password')]],
-      cuota: [0,],
-      navegacion: [false,],
-      internet: [false,],
+      tienda: [""]
     });
-  }
+  
   }
 
   llenarDatosFormulario(data: any) {
@@ -111,11 +104,7 @@ export class UsuarioFormComponent implements OnInit{
     this.formGroup.controls['username'].setValue(data.usuario);
     this.formGroup.controls['email'].setValue(data.email);
     this.formGroup.controls['perfil'].setValue(data.perfil);
-    this.formGroup.controls['cuota'].setValue(data.cuota);
-    this.formGroup.controls['internet'].setValue(data.internet);
-    this.formGroup.controls['navegacion'].setValue(data.navegacion);
-    
-    
+    this.formGroup.controls['tienda'].setValue(data.tienda);
     this.permisos = data.permisos;
     this.cdr.detectChanges();
   }
@@ -157,9 +146,8 @@ export class UsuarioFormComponent implements OnInit{
         email: this.formGroup.controls['email'].value,
         perfil: this.formGroup.controls['perfil'].value,
         password: this.formGroup.controls['password'].value,
-        cuota: this.formGroup.controls['cuota'].value,
-        internet: this.formGroup.controls['internet'].value,
-        navegacion: this.formGroup.controls['navegacion'].value,
+        tienda: this.formGroup.controls['tienda'].value,
+        
         permisos: this.permisos,
       }).subscribe(data => {
         this.lodading = false;
@@ -184,9 +172,7 @@ export class UsuarioFormComponent implements OnInit{
         email: this.formGroup.controls['email'].value,
         perfil: this.formGroup.controls['perfil'].value,
         password: this.formGroup.controls['password'].value,
-        cuota: this.formGroup.controls['cuota'].value,
-        internet: this.formGroup.controls['internet'].value,
-        navegacion: this.formGroup.controls['navegacion'].value,
+        tienda: this.formGroup.controls['tienda'].value,
         permisos: this.permisos,
       }).subscribe(data => {
         this.lodading = false;

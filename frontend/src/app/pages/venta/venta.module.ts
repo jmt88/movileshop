@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 const routes: Routes = [{
   path: '',
   component: VentaComponent
@@ -33,6 +34,7 @@ const routes: Routes = [{
   ],
   entryComponents:[],
   imports: [
+    NzDatePickerModule,
     CommonModule,
     RouterModule.forChild(routes),
     NzInputNumberModule,

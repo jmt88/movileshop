@@ -4,6 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
+import { TiendaService } from '../../tienda/tienda.service';
 import { ImportarUsuarioComponent } from '../importar-usuario/importar-usuario.component';
 import { UsuarioFormComponent } from '../usuario-form/usuario-form.component';
 import { UsuarioService } from '../usuario.service';
@@ -32,6 +33,7 @@ export class UsuarioComponent implements OnInit {
   orderValue = 'desc';
   
   searchKey: any[] = [];
+  tiendas: any[] = [];
   
   nombre = "";
   username = "";
@@ -41,7 +43,7 @@ export class UsuarioComponent implements OnInit {
 
   
   constructor(private authService: AuthService, private usuarioService: UsuarioService, 
-    private errorService: ErrorService, private modal: NzModalService, 
+    private errorService: ErrorService, private modal: NzModalService, private tiendaService: TiendaService,
     private viewContainerRef: ViewContainerRef, private cdr: ChangeDetectorRef, private messageService: NzMessageService) {
         this.permisos = this.authService.canexecute('/usuarios');
         
@@ -56,6 +58,11 @@ export class UsuarioComponent implements OnInit {
      if(data.success) {
        this.perfiles = data.perfiles;
        this.rutas = data.permiso;
+     }
+   });
+   this.tiendaService.listarTodosTiendas().subscribe(data => {
+     if(data.success) {
+       this.tiendas = data.tiendas;
      }
    })
   }
@@ -97,6 +104,7 @@ export class UsuarioComponent implements OnInit {
         nzComponentParams: {
           id: id,
           perfiles: this.perfiles,
+          tiendas: this.tiendas,
           permisosEntrada: this.rutas
         },
       });

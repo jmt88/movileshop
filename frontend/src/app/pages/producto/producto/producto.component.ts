@@ -4,6 +4,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { AuthService } from 'src/app/_core/_auth/auth.service';
 import { ErrorService } from 'src/app/_core/_interceptors/error.service';
+import { CategoriaService } from '../../categoria/categoria.service';
+import { TiendaService } from '../../tienda/tienda.service';
 import { ProductoDistribuirComponent } from '../producto-distribuir/producto-distribuir.component';
 import { ProductoFormComponent } from '../producto-form/producto-form.component';
 import { ProductoRecogerComponent } from '../producto-recoger/producto-recoger.component';
@@ -41,7 +43,7 @@ export class ProductoComponent implements OnInit {
 
   
   constructor(private authService: AuthService, private productoService: ProductoService, 
-    private errorService: ErrorService, private modal: NzModalService, 
+    private errorService: ErrorService, private modal: NzModalService, private tiendaService: TiendaService, private categoriaService: CategoriaService,
     private viewContainerRef: ViewContainerRef, private cdr: ChangeDetectorRef, private messageService: NzMessageService) {
         this.permisos = this.authService.canexecute('/productos');
   }
@@ -53,12 +55,14 @@ export class ProductoComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading=true;
    this.listarProductos();
-   this.productoService.listarTodosProductos().subscribe(data => {
+   this.tiendaService.listarTodosTiendas().subscribe(data => {
+     if(data.success) {
+       this.tiendas = data.tiendas;
+     }
+   });
+   this.categoriaService.listarTodosCategorias().subscribe(data => {
      if(data.success) {
        this.categorias = data.categorias;
-       this.tiendas = data.tiendas;
-       this.productos = data.productos;
-       this.rutas = data.permiso;
      }
    })
   }

@@ -57,7 +57,7 @@ export class CategoriaService {
   }
   
   listarTodosCategorias() {
-    return this.http.post<any>(`${this.apiUrl}/listarInformacionRequerida`, {
+    return this.http.get<any>(`${this.apiUrl}/listarTodosCategorias`, {
     });
   }
   

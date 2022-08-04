@@ -33,9 +33,4 @@ export class InventarioService {
     });
   }
 
-  listarTodosInventarios() {
-    return this.http.post<any>(`${this.apiUrl}/listarInformacionRequerida`, {
-    });
-  }
-
 }

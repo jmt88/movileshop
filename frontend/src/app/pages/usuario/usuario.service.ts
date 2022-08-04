@@ -11,9 +11,7 @@ interface Usuario {
   perfil: any,
   password: any,
   permisos: any[],
-  internet: any,
-  navegacion: any,
-  cuota?: any
+  tienda?: any
 }
 @Injectable({
   providedIn: 'root'
@@ -47,9 +45,7 @@ export class UsuarioService {
       perfil: usuario.perfil,
       password: btoa(usuario.password),
       permisos: JSON.stringify(usuario.permisos),
-      internet: usuario.internet,
-      navegacion: usuario.navegacion,
-      cuota: usuario.cuota
+      tienda: usuario.tienda,
     });
   }
 
@@ -62,9 +58,7 @@ export class UsuarioService {
       perfil: usuario.perfil,
       password: btoa(usuario.password),
       permisos: JSON.stringify(usuario.permisos),
-      internet: usuario.internet,
-      navegacion: usuario.navegacion,
-      cuota: usuario.cuota
+      tienda: usuario.tienda
     });
   }
   
