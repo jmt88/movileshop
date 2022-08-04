@@ -16,7 +16,8 @@ class CreateTiendaTable extends Migration
         Schema::create('tienda', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre')->unique();
-            $table->float('monto')->default(0);
+            $table->float('monto_total')->default(0);
+            $table->float('monto_actual')->default(0);
             $table->boolean('estado');
             $table->timestamps();
         });

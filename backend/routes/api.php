@@ -54,6 +54,7 @@ Route::post('/salvarTienda', [TiendaController::class, 'salvarTienda'])->middlew
 Route::post('/cargarDatosTienda', [TiendaController::class, 'cargarDatosTienda'])->middleware('auth:api');
 Route::post('/editarTienda', [TiendaController::class, 'editarTienda'])->middleware('auth:api');
 Route::post('/eliminarTienda', [TiendaController::class, 'eliminarTienda'])->middleware('auth:api');
+Route::get('/listarTodosTiendas', [TiendaController::class, 'listarTodosTiendas'])->middleware('auth:api');
 
 //CategoriasRoutes
 Route::post('/listarCategorias', [CategoriaController::class, 'listarCategorias'])->middleware('auth:api');
@@ -61,6 +62,7 @@ Route::post('/salvarCategoria', [CategoriaController::class, 'salvarCategoria'])
 Route::post('/cargarDatosCategoria', [CategoriaController::class, 'cargarDatosCategoria'])->middleware('auth:api');
 Route::post('/editarCategoria', [CategoriaController::class, 'editarCategoria'])->middleware('auth:api');
 Route::post('/eliminarCategoria', [CategoriaController::class, 'eliminarCategoria'])->middleware('auth:api');
+Route::get('/listarTodosCategorias', [CategoriaController::class, 'listarTodosCategorias'])->middleware('auth:api');
 
 //ProductosRoutes
 Route::post('/listarProductos', [ProductoController::class, 'listarProductos'])->middleware('auth:api');
@@ -68,7 +70,7 @@ Route::post('/salvarProducto', [ProductoController::class, 'salvarProducto'])->m
 Route::post('/cargarDatosProducto', [ProductoController::class, 'cargarDatosProducto'])->middleware('auth:api');
 Route::post('/editarProducto', [ProductoController::class, 'editarProducto'])->middleware('auth:api');
 Route::post('/eliminarProducto', [ProductoController::class, 'eliminarProducto'])->middleware('auth:api');
-Route::post('/listarInformacionRequerida', [ProductoController::class, 'listarInformacionRequerida'])->middleware('auth:api');
+Route::get('/listarTodosProductos', [ProductoController::class, 'listarTodosProductos'])->middleware('auth:api');
 
 //Distribuir Productos por tiendas
 Route::post('/distribuirProductos', [ProductoController::class, 'distribuirProductos'])->middleware('auth:api');
