@@ -22,7 +22,7 @@ class InventarioService extends BaseService
         $resultado = array();
 
         $searchKey = $request->get('searchKey');
-        $searchKey = $searchKey != null ?  json_decode($searchKey) : [];
+        $searchKey = $searchKey != null ? json_decode($searchKey) : [];
 
         $orderKey = $request->get('orderKey');
         $orderValue = $request->get('orderValue');
@@ -35,16 +35,25 @@ class InventarioService extends BaseService
 
         $query->orderBy($orderKey, $orderValue);
         foreach ($searchKey as $item) {
-            $query->where($item->key, 'like', "%$item->value%")->where('tienda_id', $user['tienda_id']);
+            if ($user['isAdmin']) {
+                if($item->key == 'tienda_id') {
+                    $query->where($item->key, '=', $item->value);
+                }
+                if($item->key == 'producto_id') {
+                    $query->where($item->key, '=', $item->value);
+                }
+            } else {
+                $query->where($item->key, '=', $item->value)->where('tienda_id', '=', $user['tienda_id']);
+            }
         }
         $total = $query->count();
 
-        $inventarios = $query->offset(($page -1 ) *$pageSize) -> limit($pageSize)->get();
+        $inventarios = $query->offset(($page - 1) * $pageSize)->limit($pageSize)->get();
 
         $pagination ['page'] = $page;
         $pagination ['pageSize'] = $pageSize;
         $pagination ['total'] = $total;
-        $pagination ['lastPage'] = ceil($total/$pageSize);
+        $pagination ['lastPage'] = ceil($total / $pageSize);
 
         foreach ($inventarios as $inventario) {
             $resultado [] = [
@@ -73,12 +82,12 @@ class InventarioService extends BaseService
 
         $user = $this->getDatosUsuario();
 
-        if($producto->existencia < $cantidad) {
+        if ($producto->existencia < $cantidad) {
             return ['success' => false, 'message' => 'No es posible realizar la operación, la cantidad a distribuir excede a la cantidad existente'];
         }
 
         $entity = Inventario::where('tienda_id', $user['tienda_id'])->where('producto_id', $producto_id)->first();
-        if(!is_null($entity)) {
+        if (!is_null($entity)) {
             $entity_venta = new Venta();
 
             $entity_venta->fecha = new \DateTime();

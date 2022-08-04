@@ -11,6 +11,7 @@ use App\Models\Rol;
 use App\Models\Tienda;
 use App\Models\Venta;
 use App\Models\Views;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\isEmpty;
@@ -33,9 +34,43 @@ class VentaService extends BaseService
 
         $query = Venta::query();
 
-        $query->orderBy($orderKey, $orderValue);
+        $query->orderBy('venta.' . $orderKey, $orderValue);
         foreach ($searchKey as $item) {
-            $query->where($item->key, 'like', "%$item->value%")->where('inventario_id.tienda_id', $user['tienda_id']);
+            if ($user['isAdmin']) {
+                if ($item->key == 'tienda_id') {
+                    $query->join('inventario', 'inventario.id', 'venta.inventario_id')->where('inventario.tienda_id', '=', $item->value);
+                }
+                if ($item->key == 'producto_id') {
+                    $esta_query = strstr($query->toSql(), 'inventario');
+                    if ($esta_query != "") {
+                        $query->where('inventario.producto_id', '=', $item->value);
+                    } else {
+                        $query->join('inventario', 'inventario.id', 'venta.inventario_id')->where('inventario.producto_id', '=', $item->value);
+                    }
+                }
+                if ($item->key == 'fecha_inicial') {
+                    $date_ini = new \DateTime($item->value);
+                    $query->where('fecha', '>=', $date_ini->format('Y-m-d') . " 00:00:00");
+                }
+                if ($item->key == 'fecha_final') {
+                    $date_end = new \DateTime($item->value);
+                    $query->where('fecha', '<=', $date_end->format('Y-m-d') . " 23:59:59");
+                }
+            } else {
+                $query->join('inventario', 'inventario.id', 'venta.inventario_id')->where('inventario.tienda_id', '=', $item->value);
+
+                if ($item->key == 'producto_id') {
+                    $query->where('inventario.producto_id', '=', $item->value);
+                }
+                if ($item->key == 'fecha_inicial') {
+                    $date_ini = new \DateTime($item->value);
+                    $query->where('fecha', '>=', $date_ini->format('Y-m-d') . " 00:00:00");
+                }
+                if ($item->key == 'fecha_final') {
+                    $date_end = new \DateTime($item->value);
+                    $query->where('fecha', '<=', $date_end->format('Y-m-d') . " 23:59:59");
+                }
+            }
         }
         $total = $query->count();
 
@@ -70,7 +105,7 @@ class VentaService extends BaseService
     {
         $entity = Venta::find($request->get('id'));
 
-        if($entity->estado == 'Pagado') {
+        if ($entity->estado == 'Pagado') {
             return ['success' => false, "message" => "No es posible cancelar la venta, ya esta en estado: Pagado"];
         }
         if ($entity) {
@@ -93,7 +128,7 @@ class VentaService extends BaseService
     {
         $entity = Venta::find($request->get('id'));
 
-        if($entity->estado == 'Cancelada') {
+        if ($entity->estado == 'Cancelada') {
             return ['success' => false, "message" => "No es posible aprobar la venta, ya esta en estado: Cancelada"];
         }
 
@@ -103,13 +138,11 @@ class VentaService extends BaseService
 
             $inventario = Inventario::find($entity->inventario_id);
             if ($inventario != null) {
-                $inventario->existencia += $entity->cantidad;
-                $inventario->save();
-
                 $tienda = Tienda::find($inventario->tienda_id);
                 $producto = Producto::find($inventario->producto_id);
                 if ($tienda != null && $producto != null) {
-                    $tienda->monto += $entity->cantidad * $producto->precio_venta;
+                    $tienda->monto_total += $entity->cantidad * $producto->precio_venta;
+                    $tienda->monto_actual += $entity->cantidad * $producto->precio_venta;
                     $tienda->save();
                 }
             }
@@ -129,12 +162,15 @@ class VentaService extends BaseService
 
             $inventario = Inventario::find($entity->inventario_id);
             if ($inventario != null) {
+                $inventario->existencia += $entity->cantidad;
+                $inventario->save();
                 $tienda = Tienda::find($inventario->tienda_id);
                 $producto = Producto::find($inventario->producto_id);
-                if ($tienda != null && $producto != null) {
+                if ($tienda != null && $producto != null && $entity->estado == 'Pagado') {
                     $monto = $entity->cantidad * $producto->precio_venta;
-                    if ($monto <= $tienda->monto) {
-                        $tienda->monto -= $monto;
+                    if ($monto <= $tienda->monto_actual) {
+                        $tienda->monto_actual -= $monto;
+                        $tienda->monto_total -= $monto;
                         $tienda->save();
                     }
                 }

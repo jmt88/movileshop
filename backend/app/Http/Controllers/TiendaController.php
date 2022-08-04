@@ -58,4 +58,13 @@ class TiendaController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
         }
     }
+
+    public function listarTodosTiendas()
+    {
+        try {
+            return response()->json($this->tiendaService->ListarTodosTiendas(), 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
+        }
+    }
 }

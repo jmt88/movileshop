@@ -58,4 +58,13 @@ class CategoriaController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
         }
     }
+
+    public function listarTodosCategorias(Request $request)
+    {
+        try {
+            return response()->json($this->categoriaService->ListarTodosCategorias($request->get('id')), 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
+        }
+    }
 }

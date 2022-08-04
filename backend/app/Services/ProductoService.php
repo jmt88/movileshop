@@ -15,26 +15,19 @@ use App\Models\Producto;
 
 class ProductoService extends BaseService
 {
-    public function ListarInformacionRequeridaProductos()
+    public function ListarTodosProductos()
     {
-        $categorias = Categoria::where('estado', true)->get();
-        $tiendas = Tienda::where('estado', true)->get();
+        $productos = Producto::where('estado', true)->get();
 
-        $permisos = Views::all();
-        $array_permiso = array();
-        foreach ($permisos as $key => $permiso) {
-            $array_permiso [] = [
-                'id' => $permiso->id,
-                'nombre' => $permiso->nombre,
-                'ver' => false,
-                'crear' => false,
-                'modificar' => false,
-                'eliminar' => false,
-                'posicion' => $key
+        $resultado = array();
+        foreach ($productos as $producto) {
+            $resultado [] = [
+                'id' => $producto->id,
+                'nombre' => $producto->nombre,
             ];
         }
 
-        return ['success' => true, 'categorias' => $categorias, 'tiendas' => $tiendas, 'permiso' => $array_permiso];
+        return ['success' => true, 'productos' => $resultado];
     }
 
     public function ListarProductos($request)

@@ -10,6 +10,21 @@ use Illuminate\Support\Facades\Validator;
 
 class TiendaService extends BaseService
 {
+    public function ListarTodosTiendas()
+    {
+        $tiendas = Tienda::where('estado', '1')->get();
+
+        $resultado = array();
+        foreach ($tiendas as $tienda) {
+            $resultado [] = [
+                'id' => $tienda->id,
+                'nombre' => $tienda->nombre,
+            ];
+        }
+
+        return ["success" => true, "tiendas" => $resultado];
+    }
+
     public function ListarTiendas($request)
     {
         $searchKey = $request->get('searchKey');
@@ -41,6 +56,8 @@ class TiendaService extends BaseService
             $resultado [] = [
                 'id' => $tienda->id,
                 'nombre' => $tienda->nombre,
+                'monto_total' => $tienda->monto_total,
+                'monto_actual' => $tienda->monto_actual,
                 'estado' => $tienda->estado
             ];
         }

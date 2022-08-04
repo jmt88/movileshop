@@ -48,9 +48,9 @@ class ProductoController extends Controller
         }
     }
 
-    public function listarInformacionRequerida() {
+    public function listarTodosProductos() {
         try{
-            return response()->json($this->productoService->ListarInformacionRequeridaProductos(), 200);
+            return response()->json($this->productoService->ListarTodosProductos(), 200);
         }
         catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 200);

@@ -11,7 +11,7 @@ class Tienda extends Model
 
     protected $table = 'tienda';
 
-    protected $fillable = ['nombre', 'estado', 'monto'];
+    protected $fillable = ['nombre', 'estado', 'monto_total', 'monto_actual'];
 
     public function users() {
         return $this->hasMany(User::class);

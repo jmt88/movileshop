@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoriaService extends BaseService
 {
+    public function ListarTodosCategorias($request)
+    {
+        $categorias = Categoria::all();
+
+        $resultado = array();
+        foreach ($categorias as $categoria) {
+            $resultado [] = [
+                'id' => $categoria->id,
+                'nombre' => $categoria->nombre,
+            ];
+        }
+        return ["success" => true, "categorias" => $resultado];
+    }
+
     public function ListarCategorias($request)
     {
         $searchKey = $request->get('searchKey');
